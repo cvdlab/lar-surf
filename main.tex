@@ -1,37 +1,0 @@
-\documentclass[11pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
-\usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
-\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
-%\geometry{landscape}                		% Activate for rotated page geometry
-%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
-\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
-								% TeX will automatically convert eps --> pdf in pdflatex		
-\usepackage{amssymb}
-
-%SetFonts
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}
-
-%SetFonts
-
-
-\title{Fast algebraic filtering of surfaces from 3D medical images with Julia}
-\author{Miroslav Ji\v{r}\'ik and Alberto Paoluzzi}
-\date{}							% Activate to display a given date or no date
-
-\begin{document}
-\maketitle
-
-\begin{abstract}
-In this paper we introduce a novel algebraic \textsc{lar-surf} filter, well founded on algebraic topology methods, to extract and smooth the boundary surface of any subset of voxels arising from the segmentation of a 3D medical image. The input is defined as a \emph{chain}, i.e.~as a vector from a linear space of 3-chains, represented in coordinates as a sparse Boolean array. The output is produced as the result of the mapping via the linear boundary operator $\partial_3:C_3 \to C_2$ between linear spaces of 3- and 2-chains.  In particular, when the input set of voxels is either not (4-)connected, or contains one or more empty regions inside, \textsc{lar-surf} generates a non connected set of closed surfaces, i.e.~a set of 2-cycles. The only data structures used are sparse arrays with one or two indices, i.e.~sparse vectors and matrices. This work is based on LAR (Linear Algebraic Representation) methods, and is implemented in Julia language, natively supporting parallel computing on hybrid architectures.
-\end{abstract}
-
-\tableofcontents
-
-%\section{}
-%\subsection{}
-
-\include{intro}\include{background}\include{filter}\include{examples}\include{conclusion}
-
-
-
-\end{document}  
