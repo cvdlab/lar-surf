@@ -1,0 +1,12 @@
+\contentsline {section}{\numberline {1}Introduction}{2}
+\contentsline {section}{\numberline {2}Background}{3}
+\contentsline {subsection}{\numberline {2.1}Linear Algebraic Representation}{3}
+\contentsline {subsection}{\numberline {2.2}Multiindices from Cartesian indices}{3}
+\contentsline {subsection}{\numberline {2.3}Taubin Smoothing}{3}
+\contentsline {section}{\numberline {3}Filter design and implementation}{4}
+\contentsline {subsection}{\numberline {3.1}Block-parametric design}{4}
+\contentsline {subsection}{\numberline {3.2}Julia implementation}{4}
+\contentsline {subsection}{\numberline {3.3}Code optimization}{4}
+\contentsline {subsection}{\numberline {3.4}Performance analysis}{4}
+\contentsline {section}{\numberline {4}Examples}{5}
+\contentsline {section}{\numberline {5}Conclusion}{6}
