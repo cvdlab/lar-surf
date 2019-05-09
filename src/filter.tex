@@ -9,7 +9,7 @@
 We assume that medical devices produce 3D images with lateral dimensions that are integer multiples of some powers of two, like 128, 256, 512, etc.
 Any cuboidal portion of image is completely determined by the Cartesian indices of its voxel of lowest and highest indices, and denoted as $Image([\ell_x, \ell_y, \ell_z],[h_x, h_y, h_z])$.
 
-For the sake of simplicity, we assume a common size on the three image axes, and the corresponding image portion, called \emph{block} $B$, as a function of its element of the  lowest single block  coordinates $i,j,k\in\N$ and block dimension $n$:
+For the sake of simplicity, we assume a common size on the three image axes, and the corresponding image portion $B$, called \emph{block}, as a function of its element of the  lowest  block  coordinates $i,j,k\in\N$ and of block dimension $n$:
 \[
 B(i,j,k,n) := Image([in,jn,kn],[i(n+1),j(n+1),k(n+1)]) 
 \]
@@ -22,7 +22,7 @@ B(i,j,k,n) := Image([in,jn,kn],[i(n+1),j(n+1),k(n+1)])
 \end{figure}
 
 
-Figure~\ref{fig:blocks} shows the block decomposition in a 2D case, with positive integer $u,v,w$ lateral sizes of image. Note that block sides do not necessarily correspond to image edges. 
+Figure~\ref{fig:blocks} shows the block decomposition in a 2D case, with positive integer $u,v$ lateral sizes of image. Note that block sides do not necessarily correspond to image edges. 
 
 
 \subsubsection{Block operator }\label{sec:bbbb}
@@ -58,8 +58,23 @@ In conclusion, for block size $n=64$, the matrix $[\partial_d]$ requires for 2D 
 
 \subsubsection{Block boundary mapping}\label{sec:bbbb}
 
+Here we refer directly to the 3D case.
+Let us call \emph{segment} the bulk content $S$ of interest within the input 3D image of size $(u,v,w)$. We aim to compute the segment boundary $\partial_3 S$. 
+First we set the size $n$ of the block, in order to decompose the input $Image(u,v,w)$ into a fair number 
+\[
+M = \ceil{u/n} \times \ceil{v/n} \times \ceil{w/n}
+\] of blocks. 
+Then we consider each image portion $c_{i,j,k} = S\cap B(i,j,k,n)$ and compute its (binary) coordinate representation  $[c]_{i,j,k}\in C_3(n,n,n)$. This one is a sparse binary vector of length $n^3$. Then assemble the $M$ representations $c$ of segment portions into a sparse binary matrix $\T{S}$, of dimension $n^d \times M$. Finally compute a matrix $\T{B}$ of boundary portions of $S$, represented by columns as chain coordinate vectors in $C_2$:
+\[
+\T{B} = [\partial_3(n,n,n)]\, \T{S}.
+\]
 
+Of course, the $\T{B}$ sparse matrix has the same column number $M$ of $\T{S}$, because each column contains the boundary representation of the corresponding $S\cap B_{i,j,k}$, and the number of rows of the operator, equal to the dimension of the linear space $C_2$.
 
+\paragraph{Embedding}
+A final computational step is needed, in order to embed the 2-chains in Euclidean space $\E^3$ and to assemble the whole resulting surface. In particular, we need to compute the \emph{embedding function} $\mu : C_0 \to \E^3$, where $C_0$ is the space of 0-chains, one-to-one corresponding to the vertices of the extracted surface. The simplest solution is to associate  four 0-cells to each 2-cell of the extracted surface, i.e.~to each non-zero entry in every column of \T{B}.  The $\mu$ function  can be computed by identifying, via  element position in the column, a triple of integer values $0\leq x\leq u, 0\leq y\leq v, 0\leq z\leq w$ for each vertex of the 2-cell.  The mapping can be implemented using a dictionary, thet will store the inverse coordinate transformation used at the beginning, i.e.~the one from linear to Cartesian coords, in order of not duplicating the output vertices.  
+
+\paragraph{Assembling the surface portions}
 
 
 \subsubsection{Block parallelism}\label{sec:bbbb}
