@@ -62,24 +62,51 @@ Here we refer directly to the 3D case.
 Let us call \emph{segment} the bulk content $S$ of interest within the input 3D image of size $(u,v,w)$. We aim to compute the segment boundary $\partial_3 S$. 
 First we set the size $n$ of the block, in order to decompose the input $Image(u,v,w)$ into a fair number 
 \[
-M = \ceil{u/n} \times \ceil{v/n} \times \ceil{w/n}
+M = \ceil{u/n} \times \ceil{v/n} \times \ceil{w/n} = \frac{uvw}{n^3}
 \] of blocks. 
 Then we consider each image portion $c_{i,j,k} = S\cap B(i,j,k,n)$ and compute its (binary) coordinate representation  $[c]_{i,j,k}\in C_3(n,n,n)$. This one is a sparse binary vector of length $n^3$. Then assemble the $M$ representations $c$ of segment portions into a sparse binary matrix $\T{S}$, of dimension $n^d \times M$. Finally compute a matrix $\T{B}$ of boundary portions of $S$, represented by columns as chain coordinate vectors in $C_2$:
 \[
-\T{B} = [\partial_3(n,n,n)]\, \T{S}.
+\T{B} = [\partial_3(n)]\, \T{S}.
 \]
-
-Of course, the $\T{B}$ sparse matrix has the same column number $M$ of $\T{S}$, because each column contains the boundary representation of the corresponding $S\cap B_{i,j,k}$, and the number of rows of the operator, equal to the dimension of the linear space $C_2$.
+where the boundary matrix has dimension $d\,n\,(1+n)^{d-1} \times n^d$.
+Of course, the $\T{B}$ sparse matrix has the same column number $M$ of $\T{S}$, because each column contains the boundary representation of the corresponding $S\cap Box_{i,j,k}{i,j,k}$, and the number of rows of the operator, equal to the dimension of the linear space $C_2$.
 
 \paragraph{Embedding}
-A final computational step is needed, in order to embed the 2-chains in Euclidean space $\E^3$ and to assemble the whole resulting surface. In particular, we need to compute the \emph{embedding function} $\mu : C_0 \to \E^3$, where $C_0$ is the space of 0-chains, one-to-one corresponding to the vertices of the extracted surface. The simplest solution is to associate  four 0-cells to each 2-cell of the extracted surface, i.e.~to each non-zero entry in every column of \T{B}.  The $\mu$ function  can be computed by identifying, via  element position in the column, a triple of integer values $0\leq x\leq u, 0\leq y\leq v, 0\leq z\leq w$ for each vertex of the 2-cell.  The mapping can be implemented using a dictionary, thet will store the inverse coordinate transformation used at the beginning, i.e.~the one from linear to Cartesian coords, in order of not duplicating the output vertices.  
+A final computational step is needed, in order to embed the 2-chains in Euclidean space $\E^3$ and to assemble the whole resulting surface. In particular, we need to compute the \emph{embedding function} $\mu : C_0 \to \E^3$, where $C_0$ is the space of 0-chains, one-to-one corresponding to the vertices of the extracted surface. The simplest solution is to associate  four 0-cells to each 2-cell of the extracted surface, i.e.~to each non-zero entry in every column of \T{B}.  The $\mu$ function  can be computed by identifying, via  element position in the column, a triple of integer values $0\leq x\leq u$, $0\leq y\leq v$, and $0\leq z\leq w$ for each vertex of the 2-cell.  The mapping can be implemented using a dictionary, that will store the inverse coordinate transformation used at the beginning, i.e.~the one from linear to Cartesian coords, in order of not duplicating the output vertices.   
 
-\paragraph{Assembling the surface portions}
+\paragraph{Surface assembling}
+
+All boundary surface subsets $B_{i,j,k}(S) = \partial_3 S \cap \mbox{Box}_{i,j,k}$, provided by  columns of $\T{S}$, are embedded in the same coordinate space. In formal terms: 
+\[
+\texttt{Lar}(S) := (\texttt{Geom}(S), \texttt{Top}(S)) = (\texttt{V}, \texttt{CV}),
+\]
+where, with respect to the \emph{chain complex} $C_3\to C_2\to C_1\to C_0$ induced by the input image $Im$ and segment $S_{i,j,k}$, we get
+\begin{align}
+\texttt{Geom} &:= \mu(C_0(_{i,j,k})) = \texttt{V},
+\\
+\texttt{Top} &:= C_3(S) = \T{S} \mapsto \texttt{CV}.
+\end{align}
+and
+\begin{align}
+\texttt{Lar}(B_{i,j,k}) &:= (\texttt{Geom}, \texttt{Top}) = (\texttt{W}, \texttt{FW}),
+\\
+\texttt{Geom} &:= \mu(C_0(B_{i,j,k})) = \texttt{W} \subset \texttt{V},
+\\
+\texttt{Top} &:= C_2(B_{i,j,k}) = \T{B}_{i,j,k} \mapsto \texttt{FW} \subset \texttt{FV}.
+\end{align}
 
 
-\subsubsection{Block parallelism}\label{sec:bbbb}
+A translation transformation applied to each vertex subset $\texttt{W}_{i,j,k}$ with translation  vector $\v{t} = [i,j,k]$ will therefore move it in the final space position, so finally giving
+\[
+\texttt{Lar}(B) = \oplus_{i,j,k}\texttt{Lar}(\partial_3 S_{i,j,k})) = \oplus_{i,j,k}(\texttt{W}, \texttt{FW}) .
+\]
 
-\subsubsection{Reduced model}\label{sec:bbbb}
+
+\subsubsection{Block-level parallelism}\label{sec:bbbb}
+
+In the computational pipeline introduced in this paper, several steps can be efficiently performed in parallel at image-block level, depending on the embarassingly data parallel nature of the problem. In particular, little effort is needed to separate the problem into a number of parallel tasks $S_{i,j,k}$, using multiarray slicing. The granularity of parallelism, depending on the block size $n$, is further enforced by the computation of a single boundary matrix $[\partial_d(n)]$, in turn depending on $n$, so that the initial communication cost of broadcasting the matrix to nodes can be carefully controlled, and finely tuned depending on the system architecture. The whole approach is appropriate  for SIMD hybrid architectures of CPUs and GPUs, since only the initial block setup of boundary matrix and image slices, as well the final collection of computed surface portions, require inter-process communication.
+
+
 
 
 
