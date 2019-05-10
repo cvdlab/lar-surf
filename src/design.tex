@@ -1,10 +1,8 @@
-\section{Filter design and implementation}\label{sec:filter}
 
 
+\section{Block-parametric design}\label{sec:filter}
 
-\subsection{Block-parametric design}\label{sec:block}
-
-\subsubsection{Block decomposition}\label{sec:bbbb}
+\subsection{Block decomposition}\label{sec:bbbb}
 
 We assume that medical devices produce 3D images with lateral dimensions that are integer multiples of some powers of two, like 128, 256, 512, etc.
 Any cuboidal portion of image is completely determined by the Cartesian indices of its voxel of lowest and highest indices, and denoted as $Image([\ell_x, \ell_y, \ell_z],[h_x, h_y, h_z])$.
@@ -25,7 +23,7 @@ B(i,j,k,n) := Image([in,jn,kn],[i(n+1),j(n+1),k(n+1)])
 Figure~\ref{fig:blocks} shows the block decomposition in a 2D case, with positive integer $u,v$ lateral sizes of image. Note that block sides do not necessarily correspond to image edges. 
 
 
-\subsubsection{Block operator }\label{sec:bbbb}
+\subsection{Block operator }\label{sec:bbbb}
 
 \paragraph{Chain coordinates }\label{sec:bbbb} 
 We are going to treat each image block independently from each other. Hence we map each image subspace $B(i,j,n)$ to the linear \emph{chain} space $C_2$ of dimension $n\times n$, using coordinate vectors $c_{h,k}\in \B^{n\times n} := \{0,1\}^{n\times n}$, where the basis element $c = c_{h,k} \in C_2$ is mapped via Cartesian-to-linear map to the Boolean vector 
@@ -56,7 +54,7 @@ mem([\partial_d]_{n^d}) = 2\times \#\mbox{nzero} + \#\mbox{columns} = 2\times 2d
 \]
 In conclusion, for block size $n=64$, the matrix $[\partial_d]$ requires for 2D images $9\times 64^2=36,864$ memory elements, and for 3D images $13\times 64^3=3,407,872$ memory elements. Counting the bytes for the standard implementation of a sparse binary matrix (1 byte for values and 8 bytes for indices) we get $(18d+8)n^d$ bytes, giving $176$\,KB for 2D and $15.872$\,MB for 3D.
 
-\subsubsection{Block boundary mapping}\label{sec:bbbb}
+\subsection{Block boundary mapping}\label{sec:bbbb}
 
 Here we refer directly to the 3D case.
 Let us call \emph{segment} the bulk content $S$ of interest within the input 3D image of size $(u,v,w)$. We aim to compute the segment boundary $\partial_3 S$. 
@@ -102,23 +100,9 @@ A translation transformation applied to each vertex subset $\texttt{W}_{i,j,k}$ 
 \]
 
 
-\subsubsection{Block-level parallelism}\label{sec:bbbb}
+\subsection{Block-level parallelism}\label{sec:bbbb}
 
 In the computational pipeline introduced in this paper, several steps can be efficiently performed in parallel at image-block level, depending on the embarassingly data parallel nature of the problem. In particular, little effort is needed to separate the problem into a number of parallel tasks $S_{i,j,k}$, using multiarray slicing. The granularity of parallelism, depending on the block size $n$, is further enforced by the computation of a single boundary matrix $[\partial_d(n)]$, in turn depending on $n$, so that the initial communication cost of broadcasting the matrix to nodes can be carefully controlled, and finely tuned depending on the system architecture. The whole approach is appropriate  for SIMD hybrid architectures of CPUs and GPUs, since only the initial block setup of boundary matrix and image slices, as well the final collection of computed surface portions, require inter-process communication.
 
 
-
-
-
-
-
-
-
-\subsection{Julia implementation}\label{sec:implementation}
-
-
-\subsection{Code optimization}\label{sec:optimization}
-
-
-\subsection{Performance analysis}\label{sec:analysis}
 
