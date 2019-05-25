@@ -5,25 +5,25 @@
 \subsection{Block decomposition}\label{sec:bbbb}
 
 We assume that medical devices produce 3D images with lateral dimensions that are integer multiples of some powers of two, like 128, 256, 512, etc.
-Any cuboidal portion of image is completely determined by the Cartesian indices of its voxel of lowest and highest indices, and denoted as $Image([\ell_x, \ell_y, \ell_z],[h_x, h_y, h_z])$.
+Any cuboidal portion of image is completely determined by the Cartesian indices of its voxel of lowest and highest indices, and extracted by multidimensional array \emph{slicing} as $Image([\ell_x$:$h_x, \ell_y$:$h_y, \ell_z$:$h_z])$.
 
 For the sake of simplicity, we assume a common size on the three image axes, and the corresponding image portion $B$, called \emph{block}, as a function of its element of the  lowest  block  coordinates $i,j,k\in\N$ and of block dimension $n$:
 \[
-B(i,j,k,n) := Image([in,jn,kn],[i(n+1),j(n+1),k(n+1)]) 
+B(i,j,k,n) := Image([in\mbox{:}in+n, jn\mbox{:}jn+n, kn\mbox{:}kn+n]) 
 \]
 
 \begin{figure}[htbp] %  figure placement: here, top, bottom, or page
    \centering
-   \includegraphics[width=2in]{figs/blocks} 
-   \caption{A possible block partitioning of a radiologic image. The evidenced 2D block is $B([2,1,64]) = Image([128,64],[172,128)]$}
+   \includegraphics[width=0.5\linewidth]{figs/blocks} 
+   \caption{A possible block partitioning of a radiologic image. The evidenced 2D block, of size $n^d=64^2$, is sliced as $B([2,1,64]) = Image([128:172],[64:128)]$}
    \label{fig:blocks}
 \end{figure}
 
 
-Figure~\ref{fig:blocks} shows the block decomposition in a 2D case, with positive integer $u,v$ lateral sizes of image. Note that block sides do not necessarily correspond to image edges. 
+Figure~\ref{fig:blocks} shows the block decomposition in a 2D image, with positive integer $u,v$ lateral sizes of image. Note that block sides do not necessarily correspond to image edges. 
 
 
-\subsection{Block operator }\label{sec:bbbb}
+\subsection{Block operator }\label{sec:block}
 
 \paragraph{Chain coordinates }\label{sec:bbbb} 
 We are going to treat each image block independently from each other. Hence we map each image subspace $B(i,j,n)$ to the linear \emph{chain} space $C_2$ of dimension $n\times n$, using coordinate vectors $c_{h,k}\in \B^{n\times n} := \{0,1\}^{n\times n}$, where the basis element $c = c_{h,k} \in C_2$ is mapped via Cartesian-to-linear map to the Boolean vector 
