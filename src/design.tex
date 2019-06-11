@@ -60,7 +60,7 @@ Here we refer directly to the 3D case.
 Let us call \emph{segment} the bulk content $S$ of interest within the input 3D image of size $(u,v,w)$. We aim to compute the segment boundary $\partial_3 S$. 
 First we set the size $n$ of the block, in order to decompose the input $Image(u,v,w)$ into a fair number 
 \[
-M = \ceil{u/n} \times \ceil{v/n} \times \ceil{w/n} = \frac{uvw}{n^3}
+M = \ceil{u/n} \times \ceil{v/n} \times \ceil{w/n} \simeq \frac{uvw}{n^3}
 \] of blocks. 
 Then we consider each image portion $c_{i,j,k} = S\cap B(i,j,k,n)$ and compute its (binary) coordinate representation  $[c]_{i,j,k}\in C_3(n,n,n)$. This one is a sparse binary vector of length $n^3$. Then assemble the $M$ representations $c$ of segment portions into a sparse binary matrix $\T{S}$, of dimension $n^d \times M$. Finally compute a matrix $\T{B}$ of boundary portions of $S$, represented by columns as chain coordinate vectors in $C_2$:
 \[
