@@ -28,9 +28,9 @@ With $size=64$, the number of non-zeros within the sparse matrix $[\partial_{64^
 \paragraph{Job enqueuing} Communication and data synchronization may be managed through \emph{Channels}, which are the FIFO conduits that may provide producer/consumer communication. Overall execution time can be improved if other tasks can be run while a task is being executed, or while waiting for an external service/function to complete. The single work items of this stage follow:
 \begin{enumerate}
 
-\item extraction of the block views, depending on 3 Cartesian indices, from image arrays;
+\item extraction, from image arrays of the block views, depending on 3 Cartesian indices;
 
-\item transform  each job \emph{from global} $[\ell_1]\times[\ell_2]\times[\ell_3]$ to \emph{local coordinates} $[n]\times[n]\times[n]$;
+\item transform  each block \emph{from global} $[\ell_1]\times[\ell_2]\times[\ell_3]$ to \emph{local coordinates} $[n]\times[n]\times[n]$;
 
 \item further transform of each \emph{foreground voxel} $\nu\in\mathcal{S}\subseteq\mathcal{I}$ from Cartesian to linear coordinates, using the suitable Julia's library functions.
 
