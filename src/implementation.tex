@@ -22,7 +22,7 @@ Hence default value: $n=256$, for images $\mathcal{I} = 512\times 512\times 256$
 
 \end{enumerate}
 
-With $size=64$, the number of non-zeros within the sparse matrix $[\partial_{64^3}]$ is $\mathtt{nnz} = 4 792 266$, for a memory size of $9\times \mathtt{nnz}+8*262144 \simeq 45$ MB. The memory size of the sparse matrix is computed by considering $8+1$ bytes for non-zero element (which are exactly 6 per row), plus 8 bytes per each index of column start.  
+With $size=64$, the number of non-zeros within the sparse matrix $[\partial_{64^3}]$ is $\mathtt{nnz} = 4 792 266$, for a memory size of $9\times \mathtt{nnz}+8\times 262144 \simeq 45$ MB. The memory size of the sparse matrix is computed by considering $8+1$ bytes for non-zero element (which are exactly 6 per row), plus 8 bytes per each index of column start.  
 
 
 \paragraph{Job enqueuing} Communication and data synchronization may be managed through \emph{Channels}, which are the FIFO conduits that may provide producer/consumer communication. Overall execution time can be improved if other tasks can be run while a task is being executed, or while waiting for an external service/function to complete. The single work items of this stage follow:
@@ -51,7 +51,6 @@ In coordinates local to $B$, once fixed an ordering from Cartesian to linear coo
 
 \item prepare subsequences of such data vectors (non-zero linear row indices), in order to feed efficiently the available processor threads.
 In case of presence of one/more GPUs, a smaller size of the block---and hence of the boundary matrix and the encoded 3-chain vectors---and then much higher vector numbers, are preferable for speed.
-
 
 \end{enumerate}
 
@@ -108,8 +107,6 @@ The final smoothing of the generated surfaces cannot be performed block-wise, si
 \item job dequeuing, by recovering finished tasks from a channel and assembling the results into the embedding function $\mathtt{V}: C_0 \to \E^3$ providing an array of type \texttt{Lar.Points} of \texttt{Float64 $\times$ 3}, with vertex coordinates by column.
 \end{enumerate}
 
-
-\subsubsection{Code optimization}\label{sec:optimization}
 
 
 \subsubsection{Performance analysis}\label{sec:analysis}

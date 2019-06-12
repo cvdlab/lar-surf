@@ -41,6 +41,59 @@ In this paper we introduce a novel algebraic \textsc{lar-surf} filter, well foun
 \include{examples}
 \include{conclusion}
 
+\appendix
+\section{Appendix}
+\subsection{Symbol list}
+
+\begin{description}
+\item[$\mathcal{I}$]  three-dimensional medical image
+\\[-8mm]
+\item[$\ell_1, \ell_2, \ell_3$]  dimensions of image
+\\[-8mm]
+\item[$\mathcal{S}$]  segment: subset of voxels
+\\[-8mm]
+\item[$\mathcal{B}$] 3D image block 
+\\[-8mm]
+\item[$size$] lateral dimension of cubic block $\mathcal{B}$ 
+\\[-8mm]
+\item[$n$]	number of blocks $\mathcal{B}$ (jobs) in $\mathcal{I}$
+\\[-8mm]
+\item[[$\partial_\mathcal{B}$] ]  boundary matrix for block $\mathcal{B}$
+\\[-8mm]
+\item[$C_p$] linear (vector) space of $p$-chains
+\\[-8mm]
+\item[$\nu\in C_p$] $p$-chain
+\\[-8mm]
+\item[[$\nu$]] coordinate representation (binary vector) of  $\nu$
+\\[-8mm]
+\item[$\E^3$] Euclidean 3-space
+\end{description}
+
+
+\subsection{Definitions}
+\begin{description}
+\item[CSC]  Compressed Sparse Column format for sparse matrices
+\\[-8mm]
+\item[Global coordinates]  Integer linear coordinates of $\mathcal{I}$
+\\[-8mm]
+\item[Local coordinates] Integer linear coordinates of $\mathcal{B}$
+\\[-8mm]
+\item[Cartesian coordinates] Integer triples $(i,j,k)$ one-to-one with voxels 
+\\[-8mm]
+\item[Voxels] individual elements in 3D image (3-cells)
+\\[-8mm]
+\item[$p$-chain] formal linear combination of $p$-cells with coefficients in $\{0,1\}$
+\\[-8mm]
+\item[Coord. repr.]  binary vector (for $p$-chains) or binary matrix (for chain operators)
+\\[-8mm]
+\item[Quad]	geometric quadrilateral; convex polygon with four vertices 
+\\[-8mm]
+\item[Foreground voxel] individual element of a segment $\mathcal{S}$
+\\[-8mm]
+\item[Segment]	subset of voxels resulting from image segmentation
+\end{description}
+
+
 
 
 \end{document}  
