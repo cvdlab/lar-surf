@@ -1,8 +1,11 @@
 
 
-\subsection{Julia implementation}\label{sec:implementation}
+\section{Julia implementation}\label{sec:implementation}
 
 The computer code is implemented in Julia language~\cite{} according to the workflow described below, whose stages are parallelized and/or optimized in various ways.
+
+\subsection{Parallel workflow}\label{sec:implementation}
+
 
 \paragraph{Workflow setup} The functions in this preliminary step include:
 \begin{enumerate}
@@ -11,19 +14,19 @@ The computer code is implemented in Julia language~\cite{} according to the work
 
 \item analysis of resources available in the computational environment, including operating system, type and number of compute nodes (processors, cores, GPUs), number of cores per node, RAM and caches amounts;
 
-\item depending on the above, best decision for $\emph{size}$ of 3D image blocks $B$ (bricks); defaults to: $\emph{size}=64$; hence the number of bricks will be $n=\ceil{\ell_1/size}\times\ceil{\ell_2/size}\times\ceil{\ell_3/size}$. 
+\item depending on the above, best decision for $\emph{size}$ of 3D image blocks $\mathcal{B}$ (bricks); defaults to: $\emph{size}=64$; hence the number of bricks will be $n=\ceil{\ell_1/size}\times\ceil{\ell_2/size}\times\ceil{\ell_3/size}$. 
 Hence default value: $n=256$, for images $\mathcal{I} = 512\times 512\times 256$;
 
-\item computation of a Julia's sparse boundary matrix $[\partial_B]$, returning a value of type \texttt{SparseMatrixCSC\{Int8\}\{Int64\}}, where \texttt{Int8} and \texttt{Int64} are the types for values and indices, respectively, stored by Compressed Sparse Column (CSC) format; the average $[\partial_B]$ (for $\emph{size}$ = 64) is about
+\item computation of a Julia's sparse boundary matrix $[\partial_B]$, returning a value of type \texttt{SparseMatrixCSC\{Int8\}\{Int64\}}, where \texttt{Int8} and \texttt{Int64} are the types for values and indices, respectively, stored by Compressed Sparse Column (CSC) format; the average $[\partial_B]$ (for $\emph{size}$ = 64) is about 45 MB;
 
-\item creation of a either a local or distributed channel to implement a producer/consumer model of parallel/distributed computation, depending on available resources;
+\item creation of either a local or distributed channel to implement a producer/consumer model of parallel/distributed computation, depending on available resources;
 
-\item distribution of matrix $[\partial_B]$, of size $45$ MB, to all available nodes/cores (workers) using the macro \texttt{@eveywhere}. 
+\item distribution of matrix $[\partial_B]$, of default size $45$ MB, to all available nodes/cores (workers) using the macro \texttt{@eveywhere}. 
 
 \end{enumerate}
 
-With $size=64$, the number of non-zeros within the sparse matrix $[\partial_{64^3}]$ is $\mathtt{nnz} = 4 792 266$, for a memory size of $9\times \mathtt{nnz}+8\times 262144 \simeq 45$ MB. The memory size of the sparse matrix is computed by considering $8+1$ bytes for non-zero element (which are exactly 6 per row), plus 8 bytes per each index of column start.  
-
+The memory occupancy of the sparse matrix is computed by considering $8+1$ bytes for non-zero element (which are exactly 6 per row), plus 8 bytes per each index of column start.  
+With $size=64$, the number of non-zeros within the sparse matrix $[\partial_{64^3}]$ is $\mathtt{nnz} = 4 792 266$, for a storage size of $9\times \mathtt{nnz}+8\times 262144 \simeq 45$ MB. 
 
 \paragraph{Job enqueuing} Communication and data synchronization may be managed through \emph{Channels}, which are the FIFO conduits that may provide producer/consumer communication. Overall execution time can be improved if other tasks can be run while a task is being executed, or while waiting for an external service/function to complete. The single work items of this stage follow:
 \begin{enumerate}
@@ -38,10 +41,10 @@ With $size=64$, the number of non-zeros within the sparse matrix $[\partial_{64^
 \end{enumerate}
 
 \paragraph{3-Chain encoding} 
-The interesting part of the \emph{Image} $\mathcal{I}$ is called \emph{Segment} $\mathcal{S}$. The goal of the whole \emph{workflow} is to extract a \emph{boundary model} of $\mathcal{S}$ from $\mathcal{I}$. The portion of $\mathcal{S}$ inside $B$, will be denoted as $\mathcal{S}(B)$.
-Each block $B$ of the 3D image must by converted into the \emph{coordinate representation} of a vector $\nu\in C_3$ in the linear space  of 3-chains. 
+The interesting part of the \emph{Image} $\mathcal{I}$ is called \emph{Segment} $\mathcal{S}$. The goal of the whole \emph{workflow} is to extract a \emph{boundary model} of $\mathcal{S}$ from $\mathcal{I}$. The portion of $\mathcal{S}$ inside $\mathcal{B}$, will be denoted as $\mathcal{S}(B)$.
+Each block $\mathcal{B}$ of the 3D image must by converted into the \emph{coordinate representation} of a vector $\nu\in C_3$ in the linear space  of 3-chains. 
 
-In coordinates local to $B$, once fixed an ordering from Cartesian to linear coords, this vector is represented by a \emph{binary array} of length $size^3$. With $size=64$, we have $64^3=262144$,  with a non-zero value (i.e.~$1$) for each foreground voxel in $\mathcal{S}(B)$. Therefore, the coded segment portion $\mathcal{S}(B)$, results with a space occupancy of about $262$ KB if encoded as a full array (i.e.~including the zero values). Whether encoded as a sparse vector, its space occupancy will correspondingly decrease.
+In coordinates local to $\mathcal{B}$, once fixed an ordering from Cartesian to linear coords, this vector is represented by a \emph{binary array} of length $size^3$. With $size=64$, we have $64^3=262144$,  with a non-zero value (i.e.~$1$) for each foreground voxel in $\mathcal{S}(B)$. Therefore, the coded segment portion $\mathcal{S}(B)$, results with a space occupancy of about $262$ KB if encoded as a full array (i.e.~including the zero values). Whether encoded as a sparse vector, its space occupancy will correspondingly decrease.
 
 \begin{enumerate}
 
@@ -75,7 +78,7 @@ Each multiplication of $[\partial_B] : C_3 \to C_2$, times a 3-chain $\nu\in C_3
 
 \item conversion from position of ones (or non-zeros) in the 2-chain to linear indices of rows;
 
-\item conversion from linear indices to Cartesian indices in coordinates local to the $B$ block, using the appropriate library functions;
+\item conversion from linear indices to Cartesian indices in coordinates local to the $\mathcal{B}$ block, using the appropriate library functions;
 
 \item conversion from each Cartesian index value to a suitably oriented (i.e.~with proper attitude) geometry quadrilateral (or pair of triangles) in local coordinates.
 
@@ -84,15 +87,15 @@ Each multiplication of $[\partial_B] : C_3 \to C_2$, times a 3-chain $\nu\in C_3
 A Julia's vectorized pipeline dataflow seems the more appropriate implementation model for the job of each worker.
 
 \paragraph{Assembling and artifact filtering} 
-The results of the previous stages can be described as a \emph{collection of sets} of \emph{geometric quadrilaterals (quads)}, each one encoded as an array of quadruples of integer indices, pointing to the linear array of grid vertices associated to the standard image block $B$.  In other words, \emph{all quads} of \textbf{each job} are now given in the \textbf{same} \emph{local coordinates}.  Besides to put each partial surface $\mathcal{S}(B) = (\texttt{V}_B, \texttt{FV}_\sigma)$ in the global coordinate system of the image, the present stage must eliminate the redundant boundary features possibly generated at the edges of the partial surface $\mathcal{S}(B)$ within each block $B$ such that $B \cap \mathcal{I} \not= \emptyset$:
+The results of the previous stages can be described as a \emph{collection of sets} of \emph{geometric quadrilaterals (quads)}, each one encoded as an array of quadruples of integer indices, pointing to the linear array of grid vertices associated to the image block $\mathcal{B}$.  In other words, \emph{all quads} of \textbf{each job} are now given in the \textbf{same} \emph{local coordinates}.  Besides to put each partial surface $\mathcal{S}(B) = (\texttt{V}_B, \texttt{FV}_\sigma)$ in the global coordinate system of the image, the present stage must eliminate the redundant boundary features possibly generated at the edges of the partial surface $\mathcal{S}(B)$ within each block $\mathcal{B}$ such that $B \cap \mathcal{I} \not= \emptyset$:
 \begin{enumerate}
 
-\item translate each array $\mathtt{FV}_\sigma$, of type \texttt{Lar.Cells}, by summing to each vertex index the linearized offset of the Cartesian coordinates $(n,m,p)(B)$ of the $B$'s \emph{reference vertex}, i.e.~the one with (all) lowest \emph{Cartesian coordinates} within the $B$ block.
+\item translate each array $\mathtt{FV}_\sigma$, of type \texttt{Lar.Cells}, by summing to each vertex index the linearized offset of the Cartesian coordinates $(n,m,p)(B)$ of the $\mathcal{B}$'s \emph{reference vertex}, i.e.~the one with (all) lowest \emph{Cartesian coordinates} within the $\mathcal{B}$ block.
 
 \item remove both instances of \emph{double quads} generated by \texttt{Lar} software at the block boundaries (see Figure~\ref{fig:blockboundary}). They are artifacts generated by the decomposition of the whole image into a number of blocks of tractable size.
 
 \item 
-a smart strategy of removal of such artifacts may be used, which does not require any sorting nor searching on the assembled array of quads. It will consist in arranging each block with all three dimensions decreased-increased by one, so that each 2-adjacent pair of blocks will be covering each other for a full side extent of blocks of depth one. The details of this \emph{artifact filtering} will be elucidated in Section~\ref{sec:covering}.
+a smart strategy of removal of such artifacts may be used, which does not require any sorting nor searching on the assembled array of quads. It will consist in arranging each block with all three dimensions decreased-increased by one, so that each 2-adjacent pair of blocks will be covering each other for a full side extent of blocks of depth one. The details of this \emph{artifact filtering} are elucidated in Section~\ref{sec:covering}.
 
 \end{enumerate}
 
@@ -109,5 +112,5 @@ The final smoothing of the generated surfaces cannot be performed block-wise, si
 
 
 
-\subsubsection{Performance analysis}\label{sec:analysis}
+\subsection{Performance analysis}\label{sec:analysis}
 
