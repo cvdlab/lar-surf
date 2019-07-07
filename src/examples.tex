@@ -1,33 +1,14 @@
 \section{Examples}\label{sec:examples}
 
 
-The size of boundary matrix is critical parameter of LAR-SURF method. To determine optimal size of boundary matrix the experiment on artifical data was performed (Fig.  \ref{fig:bm_size_tesla}). Size of experimental data is set to $512\times512\times512$ and it is derived from typical size of Computed Tomography medical images. Computation is done on Tesla DGX-1 machine
-
-\begin{figure}
-\includegraphics[width=0.99\textwidth]{figs/bm_size_tesla.pdf} 
-%\includegraphics[scale=1]{input/ircad_comparison.pdf} 
-\caption{Time requirements of LAR-SURF filter used on artifical with different size of boundary matrix}
-\label{fig:bm_size_tesla}
-\end{figure}
-
-The 
-For an experiments the we used the dataset Ircad1b. 
-
-\begin{table}
-\input{input/dataset_ircad}
-\end{table}
-\begin{table}
-\input{input/dataset_ircad_desc}
-\end{table}
-
-
-We performed experiment on Ircad dataset to compare time requirements and used t-test  check the  Based on $\alpha=0.99$ the with the $p=\input{input/ircad_pvalue}$ , 
-$s=\input{input/ircad_statistics}$
 
 
 \begin{figure}
-\includegraphics[width=0.99\textwidth]{figs/ircad_comparison.pdf} 
+\centering
+\includegraphics[width=0.4\textwidth]{figs/porta_smoothing_1.png} 
+\vspace{0.05\textwidth}
+\includegraphics[width=0.4\textwidth]{figs/porta_smoothing_2.png} 
 %\includegraphics[scale=1]{input/ircad_comparison.pdf} 
-\caption{Time requirements of LAR-SURF filter and Marching Cubes on Ircad dataset. Error bars shows the 95\% confidence interval}
-\label{fig:ircad_comparison}
+\caption{Triangulated isosurface of portal vein calculated with LAR-SURF}
+\label{fig:example_porta}
 \end{figure}
