@@ -1,2 +1,15 @@
 \section{Introduction}\label{sec:intro}
 
+
+Isosurface extraction produces geometric model of surface 
+ from volumetric data is important in many aplications. It is often used for indirect visualization of the medical data or for flow modeling \cite{Rohan2018a}.
+ 
+ 
+The most popular algorithm used for surface extraction is probably Marching Cubes (MC). The algorithm was described by Lorentsen and Cline \cite{Lorensen1987} in 1987. Survey of Marching Cubes algorthm has been published in 2006 \cite{Newman2006}. The algorithm is based on considering the cube defining volume. Each corner vertex of the cube is related to input volumetric data. MC traverse the data and constructs the surface by using lookup table of different triangular faces depending on different patterns of the cube.  Main disadvantages of this method are time requirements, ambiquity and holes generation. Some of them were discoverd shortly after the algorithm was introduced. 
+Marching Cubes. In 1991 Nielson and Hamman described Asymptotic Decider to solve the ambiguity problem on the faces of the cube.  Natarajan noted that the ambiguity problem also occurs in cubes \cite{Natarajan1994}. In 1995 Chernyaev extended the number of cases to 33 \cite{chernyaev1995marching}. More recently the algorithm was updated by Custodio to   enhance the quality of triangulation \cite{Custodio2019}. 
+
+The alternative methods have been deveoloped including method for surface extraction using particle attraction system was described by Crossno and Angel in \cite{Crossno2002} and method processing on a graph that tracks cell face adjacencies is described in \cite{Lachaud2000}. The parallel algorithms for surface extraction are discussed in \cite{Bajaj2004}.
+
+
+
+

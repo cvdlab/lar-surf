@@ -25,8 +25,20 @@ Hence default value: $n=256$, for images $\mathcal{I} = 512\times 512\times 256$
 
 \end{enumerate}
 
+<<<<<<< HEAD
 The memory occupancy of the sparse matrix is computed by considering $8+1$ bytes for non-zero element (which are exactly 6 per row), plus 8 bytes per each index of column start.  
 With $size=64$, the number of non-zeros within the sparse matrix $[\partial_{64^3}]$ is $\mathtt{nnz} = 4 792 266$, for a storage size of $9\times \mathtt{nnz}+8\times 262144 \simeq 45$ MB. 
+=======
+\begin{figure}[htbp]
+\includegraphics[width=0.99\textwidth]{figs/schema_horizontal.pdf} 
+%\includegraphics[scale=1]{input/ircad_comparison.pdf} 
+\caption{Workflow of LAR-SURF algorithm}
+\label{fig:schema}
+\end{figure}
+
+With $size=64$, the number of non-zeros within the sparse matrix $[\partial_{64^3}]$ is $\mathtt{nnz} = 4 792 266$, for a memory size of $9\times \mathtt{nnz}+8\times 262144 \simeq 45$ MB. The memory size of the sparse matrix is computed by considering $8+1$ bytes for non-zero element (which are exactly 6 per row), plus 8 bytes per each index of column start.  
+
+>>>>>>> f5c1ade674505d34a52843fee9697d472b4d29eb
 
 \paragraph{Job enqueuing} Communication and data synchronization may be managed through \emph{Channels}, which are the FIFO conduits that may provide producer/consumer communication. Overall execution time can be improved if other tasks can be run while a task is being executed, or while waiting for an external service/function to complete. The single work items of this stage follow:
 \begin{enumerate}
@@ -113,6 +125,32 @@ The final smoothing of the generated surfaces cannot be performed block-wise, si
 
 
 \subsection{Performance analysis}\label{sec:analysis}
+
+The size of boundary matrix is critical parameter of LAR-SURF method. To determine optimal size of boundary matrix the experiment on artifical data was performed (Fig.  \ref{fig:bm_size_tesla}). Size of experimental data is set to $512\times512\times512$ and it is derived from typical size of Computed Tomography medical images. Computation is done on Tesla DGX-1 machine.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.6\textwidth]{figs/bm_size_tesla.pdf} 
+%\includegraphics[scale=1]{input/ircad_comparison.pdf} 
+\caption{Time requirements of LAR-SURF filter used on artifical with different size of boundary matrix}
+\label{fig:bm_size_tesla}
+\end{figure}
+
+
+
+To compare time requirements of LAR-SURF with Marching Cubes implemented in Python we performed experiment on Ircadb dataset \cite{ircad}. Dataset contain 20 Computed Tomography images (see table \ref{tab:ircad1}) with xy-resolution from 0.56 mm to 0.87 mm and z-resolution from 1.0 mm to 4.0 mm. The number of slices is each series varies from 74 to 260 and size of each slice is $512\times512$. Dataset contain manually segmented liver, portal vein and other structures. We performed surface extraction of liver with Marching Cubes and LAR-SURF. Time required for computation can be seen on figure \ref{fig:ircad_comparison}. 
+
+Based on t-test with $\alpha=0.99$, $p=\input{input/ircad_pvalue}$ and 
+$s=\input{input/ircad_statistics}$ it can be shown that the mean of time consumed by LAR-SURF is significantly lower from time consumed by Marching Cubes.
+
+
+\begin{figure}
+\centering
+\includegraphics[width=0.99\textwidth]{figs/ircad_comparison.pdf} 
+%\includegraphics[scale=1]{input/ircad_comparison.pdf} 
+\caption{Time requirements of LAR-SURF filter and Marching Cubes on Ircad dataset. Error bars shows the 95\% confidence interval}
+\label{fig:ircad_comparison}
+\end{figure}
 
 
 

@@ -1,10 +1,10 @@
 \documentclass[11pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
 \usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
-\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ...
 %\geometry{landscape}                		% Activate for rotated page geometry
 %\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
 \usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
-								% TeX will automatically convert eps --> pdf in pdflatex		
+								% TeX will automatically convert eps --> pdf in pdflatex
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{hyperref}
@@ -14,13 +14,20 @@
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 
+
+
 \input{macros}
 
 % rules for for inputed tables
-\newcommand{\toprule}{\hline}
-\newcommand{\midrule}{\hline}
-\newcommand{\bottomrule}{\hline}
-\newcommand{\specialrule}{}
+% the
+\usepackage{siunitx}
+\usepackage{booktabs}
+
+%alternative rules for tables
+%\newcommand{\toprule}{\hline}
+%\newcommand{\midrule}{\hline}
+%\newcommand{\bottomrule}{\hline}
+%\newcommand{\specialrule}{}
 
 %SetFonts
 
@@ -48,6 +55,8 @@ In this paper we introduce a novel algebraic \textsc{lar-surf} filter, well foun
 \include{examples}
 \include{conclusion}
 
+
+
 \appendix
 \section{Appendix}
 \subsection{Symbol list}
@@ -59,9 +68,9 @@ In this paper we introduce a novel algebraic \textsc{lar-surf} filter, well foun
 \\[-7mm]
 \item[$\mathcal{S}$]  segment: a subset of voxels from image segmentation
 \\[-7mm]
-\item[$\mathcal{B}$] 3D image block 
+\item[$\mathcal{B}$] 3D image block
 \\[-7mm]
-\item[$size$] lateral dimension of cubic block $\mathcal{B}$ 
+\item[$size$] lateral dimension of cubic block $\mathcal{B}$
 \\[-7mm]
 \item[$n$]	number of blocks $\mathcal{B}$ (jobs) in $\mathcal{I}$
 \\[-7mm]
@@ -88,7 +97,7 @@ In this paper we introduce a novel algebraic \textsc{lar-surf} filter, well foun
 \\[-7mm]
 \item[Local coordinates] Integer linear coordinates of $\mathcal{B}$
 \\[-7mm]
-\item[Cartesian coordinates] Integer triples $(i,j,k)$ one-to-one with voxels 
+\item[Cartesian coordinates] Integer triples $(i,j,k)$ one-to-one with voxels
 \\[-7mm]
 \item[Voxels] Individual elements in 3D image (3-cells)
 \\[-7mm]
@@ -96,19 +105,27 @@ In this paper we introduce a novel algebraic \textsc{lar-surf} filter, well foun
 \\[-7mm]
 \item[Coord. repr.]  Binary vector (for $p$-chains) or binary matrix (for chain operators)
 \\[-7mm]
-\item[Quad]	Geometric quadrilateral; convex polygon with four vertices 
+\item[Quad]	Geometric quadrilateral; convex polygon with four vertices
 \\[-7mm]
 \item[Foreground voxel] Individual element of a segment $\mathcal{S}$
 \\[-7mm]
 \item[Segment]	Subset of voxels resulting from image segmentation
 \end{description}
 
+\subsection{Dataset Ircad}
 
-% Bibliography
-\bibliographystyle{acm}
-%\bibliography{TOMS2017.bib,proposal.bib,cadj2017.bib,bib.bib,schemes.bib}
-\bibliography{TSAS-2019.bib}
+\begin{table}
+\input{input/dataset_ircad}
+\label{tab:ircad1}
+\end{table}
 
+\begin{table}
+\input{input/dataset_ircad_desc}
+\label{tab:ircad2}
+\end{table}
 
+\clearpage{}
+\bibliographystyle{alpha}
+\bibliography{library}
 
-\end{document}  
+\end{document}
