@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <title>Elsevier Enhanced Reader</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <meta name="citation_pdf_url" content="https://www.sciencedirect.com/science/article/pii/S0097849306001336/pdfft?isDTMRedir=true&download=true">
+    <link rel="schema.dc" href="http://purl.org/dc/elements/1.1/" />
+    <meta name="citation_doi" content=10.1016/j.cag.2006.07.021>
+    <meta name="dc.identifier" content=10.1016/j.cag.2006.07.021>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="//sdfestaticassets-eu-west-1.sciencedirectassets.com/shared-assets/11/images/favSD.ico" type="image/x-icon">
+    <link rel="icon" href="//sdfestaticassets-eu-west-1.sciencedirectassets.com/shared-assets/11/images/favSD.ico" type="image/x-icon">
+    <script>
+      config = {
+        addToLibrarySDKUrl: "https://static.mendeley.com/bin/extensions/add-to-library-sdk/2000015/add-to-library-sdk.js",
+        addToLibraryEndpoint: "https://www.mendeley.com/add-to-library/",
+        useSourceMaps: false,
+        assetsBaseUrl: "https://ars.els-cdn.com",
+        SDBaseUrl: "https://www.sciencedirect.com",
+        assetCdnUrl: "//sdfestaticassets-eu-west-1.sciencedirectassets.com",
+        remotePdfJsPath: "/shared-assets/29/js/pdfjs/2.1.266-er.0.2",
+        environmentName: "prod",
+        hotReload: false,
+        feature: {
+    "enhancementsModule": false,
+    "idPlusEnabled": false,
+    "nonserialSiblings": false
+}
+      };
+      window.assetsBaseUrl="//sdfestaticassets-eu-west-1.sciencedirectassets.com/prod/58d6b11a4655e3230c41eb0404d7ae9432fe4bef";
+    </script>
+    <noscript>
+        <h1>JavaScript needs to be enabled for this application to run correctly</h1>
+    </noscript>
+    
+<script>
+(function (arr) {
+  arr.forEach(function (item) {
+    if (item.hasOwnProperty('remove')) {
+      return;
+    }
+    Object.defineProperty(item, 'remove', {
+      configurable: true,
+      enumerable: true,
+      writable: true,
+      value: function remove() {
+        if (this.parentNode !== null)
+          this.parentNode.removeChild(this);
+      }
+    });
+  });
+})([Element.prototype, CharacterData.prototype, DocumentType.prototype]);
+</script>
+    
+<!-- begin polyfill for closest -->
+<script>if (!Element.prototype.matches)
+    Element.prototype.matches = Element.prototype.msMatchesSelector ||
+                                Element.prototype.webkitMatchesSelector;
+
+if (!Element.prototype.closest)
+    Element.prototype.closest = function(s) {
+        var el = this;
+        if (!document.documentElement.contains(el)) return null;
+        do {
+            if (el.matches(s)) return el;
+            el = el.parentElement || el.parentNode;
+        } while (el !== null && el.nodeType === 1);
+        return null;
+    };</script>
+<!-- end polyfill for closest -->
+
+    
+<!-- begin polyfill for dataset -->
+<script>
+if (!Function.prototype.bind) {
+    Function.prototype.bind = function (oThis) {
+        'use strict';
+        if (typeof this !== "function") {
+            // closest thing possible to the ECMAScript 5 internal IsCallable function
+            throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
+        }
+
+        var aArgs = Array.prototype.slice.call(arguments, 1),
+            fToBind = this,
+            FNOP = function () {},
+            fBound = function () {
+                return fToBind.apply(
+                    this instanceof FNOP && oThis ? this : oThis,
+                   aArgs.concat(Array.prototype.slice.call(arguments))
+               );
+            };
+
+        FNOP.prototype = this.prototype;
+        fBound.prototype = new FNOP();
+
+        return fBound;
+    };
+}
+
+(function () {
+    'use strict';
+    var ObjectProto = Object.prototype,
+    defineGetter = ObjectProto.__defineGetter__,
+    defineSetter = ObjectProto.__defineSetter__,
+    lookupGetter = ObjectProto.__lookupGetter__,
+    lookupSetter = ObjectProto.__lookupSetter__,
+    hasOwnProp = ObjectProto.hasOwnProperty;
+    
+    if (defineGetter && defineSetter && lookupGetter && lookupSetter) {
+
+        if (!Object.defineProperty) {
+            Object.defineProperty = function (obj, prop, descriptor) {
+                if (arguments.length < 3) { // all arguments required
+                    throw new TypeError("Arguments not optional");
+                }
+                
+                prop += ""; // convert prop to string
+
+                if (hasOwnProp.call(descriptor, "value")) {
+                    if (!lookupGetter.call(obj, prop) && !lookupSetter.call(obj, prop)) {
+                        // data property defined and no pre-existing accessors
+                        obj[prop] = descriptor.value;
+                    }
+
+                    if ((hasOwnProp.call(descriptor, "get") ||
+                         hasOwnProp.call(descriptor, "set"))) 
+                    {
+                        // descriptor has a value prop but accessor already exists
+                        throw new TypeError("Cannot specify an accessor and a value");
+                    }
+                }
+
+                // can't switch off these features in ECMAScript 3
+                // so throw a TypeError if any are false
+                if (!(descriptor.writable && descriptor.enumerable && 
+                    descriptor.configurable))
+                {
+                    throw new TypeError(
+                        "This implementation of Object.defineProperty does not support" +
+                        " false for configurable, enumerable, or writable."
+                    );
+                }
+                
+                if (descriptor.get) {
+                    defineGetter.call(obj, prop, descriptor.get);
+                }
+                if (descriptor.set) {
+                    defineSetter.call(obj, prop, descriptor.set);
+                }
+            
+                return obj;
+            };
+        }
+
+        if (!Object.getOwnPropertyDescriptor) {
+            Object.getOwnPropertyDescriptor = function (obj, prop) {
+                if (arguments.length < 2) { // all arguments required
+                    throw new TypeError("Arguments not optional.");
+                }
+                
+                prop += ""; // convert prop to string
+
+                var descriptor = {
+                    configurable: true,
+                    enumerable  : true,
+                    writable    : true
+                },
+                getter = lookupGetter.call(obj, prop),
+                setter = lookupSetter.call(obj, prop);
+
+                if (!hasOwnProp.call(obj, prop)) {
+                    // property doesn't exist or is inherited
+                    return descriptor;
+                }
+                if (!getter && !setter) { // not an accessor so return prop
+                    descriptor.value = obj[prop];
+                    return descriptor;
+                }
+
+                // there is an accessor, remove descriptor.writable;
+                // populate descriptor.get and descriptor.set (IE's behavior)
+                delete descriptor.writable;
+                descriptor.get = descriptor.set = undefined;
+                
+                if (getter) {
+                    descriptor.get = getter;
+                }
+                if (setter) {
+                    descriptor.set = setter;
+                }
+                
+                return descriptor;
+            };
+        }
+
+        if (!Object.defineProperties) {
+            Object.defineProperties = function (obj, props) {
+                var prop;
+                for (prop in props) {
+                    if (hasOwnProp.call(props, prop)) {
+                        Object.defineProperty(obj, prop, props[prop]);
+                    }
+                }
+            };
+        }
+    }
+}());
+
+// Begin dataset code
+
+if (!document.documentElement.dataset && 
+         // FF is empty while IE gives empty object
+        (!Object.getOwnPropertyDescriptor(Element.prototype, 'dataset')  ||
+        !Object.getOwnPropertyDescriptor(Element.prototype, 'dataset').get)
+    ) {
+    var propDescriptor = {
+        enumerable: true,
+        get: function () {
+            'use strict';
+            var i, 
+                that = this,
+                HTML5_DOMStringMap, 
+                attrVal, attrName, propName,
+                attribute,
+                attributes = this.attributes,
+                attsLength = attributes.length,
+                toUpperCase = function (n0) {
+                    return n0.charAt(1).toUpperCase();
+                },
+                getter = function () {
+                    return this;
+                },
+                setter = function (attrName, value) {
+                    return (typeof value !== 'undefined') ? 
+                        this.setAttribute(attrName, value) : 
+                        this.removeAttribute(attrName);
+                };
+            try { // Simulate DOMStringMap w/accessor support
+                // Test setting accessor on normal object
+                ({}).__defineGetter__('test', function () {});
+                HTML5_DOMStringMap = {};
+            }
+            catch (e1) { // Use a DOM object for IE8
+                HTML5_DOMStringMap = document.createElement('div');
+            }
+            for (i = 0; i < attsLength; i++) {
+                attribute = attributes[i];
+                // Fix: This test really should allow any XML Name without 
+                //         colons (and non-uppercase for XHTML)
+                if (attribute && attribute.name && 
+                    (/^data-\w[\w\-]*$/).test(attribute.name)) {
+                    attrVal = attribute.value;
+                    attrName = attribute.name;
+                    // Change to CamelCase
+                    propName = attrName.substr(5).replace(/-./g, toUpperCase);
+                    try {
+                        Object.defineProperty(HTML5_DOMStringMap, propName, {
+                            enumerable: this.enumerable,
+                            get: getter.bind(attrVal || ''),
+                            set: setter.bind(that, attrName)
+                        });
+                    }
+                    catch (e2) { // if accessors are not working
+                        HTML5_DOMStringMap[propName] = attrVal;
+                    }
+                }
+            }
+            return HTML5_DOMStringMap;
+        }
+    };
+    try {
+        // FF enumerates over element's dataset, but not 
+        //   Element.prototype.dataset; IE9 iterates over both
+        Object.defineProperty(Element.prototype, 'dataset', propDescriptor);
+    } catch (e) {
+        propDescriptor.enumerable = false; // IE8 does not allow setting to true
+        Object.defineProperty(Element.prototype, 'dataset', propDescriptor);
+    }
+}
+</script>
+<!-- end polyfill for dataset -->
+
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>window.reduxState = {"pdfContent":{"pdfDownloadEndpoint":"https://www.sciencedirect.com/science/article/pii/S0097849306001336/pdfft?isDTMRedir=true&download=true","identification":{"pii":"S0097849306001336","doi":"","issn":"","isbn":"","cid":"","document":""},"loadPdfUrl":"https://pdf.sciencedirectassets.com/271576/1-s2.0-S0097849306X01401/1-s2.0-S0097849306001336/main.pdf?X-Amz-Security-Token=AgoJb3JpZ2luX2VjEP7%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJHMEUCIQCbCuGlF0hqAzIkuovQFnwZQUk1heNFxmJaDsqyilgphwIgFk3ynzbDnpu%2FMYSqB63gA4y9hE6meeLvjhfF6KPq92Uq2gMIVxACGgwwNTkwMDM1NDY4NjUiDD8FRl%2BOMeIA9Y46DSq3A27Xe3Nm4KOz43nmIJRADUqV4IIk%2BCQviPKy91a4DvG4f2VQRV6sIiVaAdtc7f%2BFsUaQxl94gAAAO0YotJx4KI1U4MeyYSa96nw3SzJTQ08k0%2BN6pF95j3XSwd%2B0rYd8i2sgBpm4AD%2FK8bK4VhQ6pib0nBNjBM6dIeZ%2FWuVya%2Bm28pMHI1I3FWeosob%2Frep3s39R56XZXNmaN23paWrKFG42sByiqQnqg0cY2sr69CYWicJhYMqWE5VwPjC78pfGWPeug2CTq7xxVsaedZ7lbWNswscKIPpsu0NDnd9ORV27jsdHvMh3OCckMCVxT8GxxP%2B2g9sPj8sZJa9HIiQq8VK3D%2BYXRnDDuuoFpLKUXl3lZXofEklHBCqwY5QOOOmBJIDwgSDLqAAxrvhhzB9n7R%2FeRhbt4bEgq%2B46H9kH4%2Fp%2BCUGLWebb7cyR0gzMrhKOPOTfzQ3U4sLGYxdHZjvISo4hR52QiLJed1cg8GGnp8YyRNPcXuHsESzHXkhiMuWOVCu9fFA4wbDy1H8Uiaulx%2B7EGXmHBHNvh9bqMzBmjq42TNRYLPuvZEOwPPLNd77D06%2BCQj7Fuw4wtbeL6QU6tAF92w6rgLHMeSHUq%2FA%2FmK27olea5gYNdm49WGj%2Fn4Up07vMUm%2FodHotvabksV3Q7aL1YKNef6LaRCaCFo0I8wj7dxoIL8HAiBpNWXqdgxF9ET47pIX2wt8UslvSH7b3gVRfAYD939dWIf2w%2Bd3nD30j%2FaTUa0vjixeRgfwl8O980IN%2F2f3EIGLpHay729ZI89WmNXw6q%2FM8p0vxP7YY5YPY7IyZsMdxP3EIbr2EITBOio3NYF8%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190708T063434Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIAQ3PHCVTY5RNCI2EW%2F20190708%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=b2d7281142e327538bf0ad8a12d0f5778d20862c334bb5c0dd9219f446d5fecf&hash=56ff1a5320d811984822e461a77875e878b01e52ab2893a527848a96cd6ae1d0&host=68042c943591013ac2b2430a89b270f6af2c76d8dfd086a07176afe7c76c2c61&pii=S0097849306001336&tid=prr-bed0e258-e336-4df0-bb3f-1d74e265a81d&sid=a0ec7cd3254f1743b40b2f1497cc9d34f572gxrqb&type=client&download=true","expiredFallbackEndpoint":"https://www.sciencedirect.com/science/article/pii/S0097849306001336"},"token":"6EFAA31E53D9272D7A5F5379FB7C8270963244E5BCDDF9CF6E27957A7A3A18F2117616A428709B2386FF7626204F1588","view":"ENHANCED_PDFJS","idType":"pii","browserInfo":{"isSupported":true,"supportsRangeRequests":true,"supportsAtl":true},"metadata":{"contentFamily":"serial","doi":"10.1016/j.cag.2006.07.021","language":"en"},"showConnections":false}</script>
+    <script>!function(e){var n={};function r(t){if(n[t])return n[t].exports;var o=n[t]={i:t,l:!1,exports:{}};return e[t].call(o.exports,o,o.exports,r),o.l=!0,o.exports}r.m=e,r.c=n,r.d=function(e,n,t){r.o(e,n)||Object.defineProperty(e,n,{enumerable:!0,get:t})},r.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},r.t=function(e,n){if(1&n&&(e=r(e)),8&n)return e;if(4&n&&"object"==typeof e&&e&&e.__esModule)return e;var t=Object.create(null);if(r.r(t),Object.defineProperty(t,"default",{enumerable:!0,value:e}),2&n&&"string"!=typeof e)for(var o in e)r.d(t,o,function(n){return e[n]}.bind(null,o));return t},r.n=function(e){var n=e&&e.__esModule?function(){return e.default}:function(){return e};return r.d(n,"a",n),n},r.o=function(e,n){return Object.prototype.hasOwnProperty.call(e,n)},r.p="",r(r.s=1)}([function(e,n,r){var t,o,c;o=[],void 0===(c="function"==typeof(t=function(){var e=function(){},n={},r={},t={};function o(e,n){if(e){var o=t[e];if(r[e]=n,o)for(;o.length;)o[0](e,n),o.splice(0,1)}}function c(n,r){n.call&&(n={success:n}),r.length?(n.error||e)(r):(n.success||e)(n)}function i(n,r,t,o){var c,s,a=document,u=t.async,f=(t.numRetries||0)+1,l=t.before||e,d=n.replace(/^(css|img)!/,"");o=o||0,/(^css!|\.css$)/.test(n)?((s=a.createElement("link")).rel="stylesheet",s.href=d,(c="hideFocus"in s)&&s.relList&&(c=0,s.rel="preload",s.as="style")):/(^img!|\.(png|gif|jpg|svg)$)/.test(n)?(s=a.createElement("img")).src=d:((s=a.createElement("script")).src=n,s.async=void 0===u||u),s.onload=s.onerror=s.onbeforeload=function(e){var a=e.type[0];if(c)try{s.sheet.cssText.length||(a="e")}catch(e){18!=e.code&&(a="e")}if("e"==a){if((o+=1)<f)return i(n,r,t,o)}else if("preload"==s.rel&&"style"==s.as)return s.rel="stylesheet";r(n,a,e.defaultPrevented)},!1!==l(n,s)&&a.head.appendChild(s)}function s(e,r,t){var s,a;if(r&&r.trim&&(s=r),a=(s?t:r)||{},s){if(s in n)throw"LoadJS";n[s]=!0}function u(n,r){!function(e,n,r){var t,o,c=(e=e.push?e:[e]).length,s=c,a=[];for(t=function(e,r,t){if("e"==r&&a.push(e),"b"==r){if(!t)return;a.push(e)}--c||n(a)},o=0;o<s;o++)i(e[o],t,r)}(e,function(e){c(a,e),n&&c({success:n,error:r},e),o(s,e)},a)}if(a.returnPromise)return new Promise(u);u()}return s.ready=function(e,n){return function(e,n){e=e.push?e:[e];var o,c,i,s=[],a=e.length,u=a;for(o=function(e,r){r.length&&s.push(e),--u||n(s)};a--;)c=e[a],(i=r[c])?o(c,i):(t[c]=t[c]||[]).push(o)}(e,function(e){c(n,e)}),s},s.done=function(e){o(e,[])},s.reset=function(){n={},r={},t={}},s.isDefined=function(e){return e in n},s})?t.apply(n,o):t)||(e.exports=c)},function(e,n,r){e.exports=r(2)},function(e,n,r){"use strict";r.r(n);var t,o,c,i,s,a,u,f,l,d,p,m,y,b,v=r(0),h=r.n(v);function w(e){(console.error||console.log)("path not found: ".concat(e))}function g(e){var n=window.config.environmentName;e.forEach(w);var r=window.reduxState.pdfContent.pdfDownloadEndpoint;"local"!==n?setTimeout(function(){window.location=r},500):(console.error||console.log)("Error redirected location: ".concat(r))}function j(e){var n=e.message;(console.error||console.log)("a critical error occurred: ".concat(n))}window.addEventListener("error",j),window.removeErrorHandler=function(){window.removeEventListener("error",j)},n.default=(t=window,o=t.assetsBaseUrl,c=t.config,i=c.assetCdnUrl,s=c.remotePdfJsPath,a=c.hotReload,u=c.useSourceMaps,f=c.feature,l="".concat(i,"/shared-assets/18/js"),d="".concat(i,"/shared-assets/26/js"),p="".concat(i).concat(s),m=u?"js":"min.js",y=f.enhancementsModule?"-enhancements":"",b=a?"js":"css",h()("".concat(o,"/style").concat(y,".").concat(b),"css",{numRetries:1}),h()("".concat(l,"/babel-polyfill/6.26.0/babel-polyfill.min.js?origin=er"),"babelPolyfill",{numRetries:1}),h.a.ready("babelPolyfill",{error:g,success:function(){h()("".concat(d,"/react/16.8.4/react.production.min.js?origin=er"),"React",{numRetries:1}),h()("".concat(p,"/pdf.").concat(m),"pdfJs",{numRetries:1})}}),h.a.ready("React",{error:g,success:function(){h()("".concat(d,"/react-dom/16.8.4/react-dom.production.min.js?origin=er"),"ReactDOM",{numRetries:1})}}),h.a.ready("pdfJs",{error:g,success:function(){window.pdfjsLib=window["pdfjs-dist/build/pdf"],window.pdfjsLib.GlobalWorkerOptions.workerSrc="".concat(p,"/pdf.worker.").concat(m),h()("".concat(p,"/web/pdf_viewer.js"),"pdfViewer",{numRetries:1})}}),h.a.ready(["babelPolyfill","React","ReactDOM","pdfJs","pdfViewer"],{error:g,success:function(){h()("".concat(o,"/client.js"),"clientJs",{numRetries:1})}}),void h.a.ready(["clientJs","css"],{error:g}))}]);</script>
+    <!-- begin mPulse embed code -->
+      <script crossorigin="anonymous">
+        (function(){
+          if(window.BOOMR && window.BOOMR.version){return;}
+          var dom,doc,where,iframe = document.createElement('iframe'),win = window;
+
+          function boomerangSaveLoadTime(e) {
+            win.BOOMR_onload=(e && e.timeStamp) || new Date().getTime();
+          }
+          if (win.addEventListener) {
+            win.addEventListener("load", boomerangSaveLoadTime, false);
+          } else if (win.attachEvent) {
+            win.attachEvent("onload", boomerangSaveLoadTime);
+          }
+
+          iframe.src = "javascript:false";
+          iframe.title = ""; iframe.role="presentation";
+          (iframe.frameElement || iframe).style.cssText = "width:0;height:0;border:0;display:none;";
+          where = document.getElementsByTagName('script')[0];
+          where.parentNode.insertBefore(iframe, where);
+
+          try {
+            doc = iframe.contentWindow.document;
+          } catch(e) {
+            dom = document.domain;
+            iframe.src="javascript:var d=document.open();d.domain='"+dom+"';void(0);";
+            doc = iframe.contentWindow.document;
+          }
+          doc.open()._l = function() {
+            var js = this.createElement("script");
+            if(dom) this.domain = dom;
+            js.id = "boomr-if-as";
+            js.src = 'https://c.go-mpulse.net/boomerang/KJTTV-JCM57-JXR57-C5K9C-VQ432';
+            js.crossorigin = "anonymous";
+            BOOMR_lstart=new Date().getTime();
+            this.body.appendChild(js);
+          };
+          doc.write('<body onload="document._l();">');
+          doc.close();
+        })();
+      </script>
+      <!-- end mPulse embed code -->
+    
+    <!-- begin Adobe analytics embed code -->
+    <script src="//assets.adobedtm.com/376c5346e33126fdb6b2dbac81e307cbacfd7935/satelliteLib-ccabfd4eff51f13ec6044a55dd2a03e681ff3ec8.js"></script>
+    <script>
+    window.pageData = {"page":{"businessUnit":"ELS:RP:ST","language":"en","name":"page-init","noTracking":"false","productName":"ER","type":"CP-CA","environment":"prod"},"visitor":{"ipAddress":"2.42.31.231","accessType":"ae:ANON_SHIBBOLETH","appSessionId":"a0ec7cd3254f1743b40b2f1497cc9d34f572gxrqb","accountId":"ae:59161","accountName":"ae:Roma Tre University","loginStatus":"anonymous","userId":"ae:7562900"},"content":[{"type":"SD:ARTICLE:JL:SCOPE-FULL","entitlementType":"package","format":"MIME-PDF","id":"sd:article:pii:S0097849306001336","detail":"SD:ARTICLE:subtype:fla:tool:primary_download_button"}]};
+    window.pageName = "enhanced_reader";
+    pageDataTracker.trackPageLoad();
+    </script>
+    <!-- end Adobe analytics embed code -->
+  
+    <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    messageStyle: 'none',
+    displayAlign: 'left',
+    "fast-preview": {
+      disabled: true
+    },
+    CommonHTML: { linebreaks: { automatic: true } },
+    PreviewHTML: { linebreaks: { automatic: true } },
+    'HTML-CSS': { linebreaks: { automatic: true } },
+    SVG: {
+      scale: 90,
+      linebreaks: { automatic: true }
+    }
+  });
+</script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=MML_SVG"></script>
+    
+<div id="unsupportedPrintContainer" style="display: none">
+        <div class="warning-icon-container">
+            <svg focusable="false" viewBox="0 0 16 128" width="64" height="64" class="icon icon-warning">
+                <path d="m13.25 75.09h-9.87l-0.63-59.09h11.14l-0.64 59.09zm1.97 19.04c0 3.95-3.25 7.2-7.25 7.2-3.95 0-7.2-3.25-7.2-7.2 0-4 3.25-7.2 7.2-7.2 2.4 0 4.59 1.17 5.87 3.04 0.85 1.18 1.33 2.62 1.33 4.22z"></path>
+            </svg> 
+        </div>
+        <p>To print this document, select the Print icon
+            <span class="printer-icon-container">
+                <svg focusable="false" viewBox="0 0 1 1" class="icon-background">
+                    <rect x="0" y="0" width="100%" height="100%" fill="black"></rect>
+                </svg>
+                <svg focusable="false" viewBox="0 0 126 128" class="icon icon-printer-2" fill="white">
+                    <path d="m97 54h1e1v1e1h-1e1v-1e1zm-6e1 28h52v24h-52v-24zm-1e1 34h72v-44h-72v44zm1e1 -1e2h52v2e1h-52v-2e1zm75 2e1h-13v-3e1h-72v3e1h-13c-7.16 0-13 5.83-13 13v4e1c0 7.17 5.84 13 13 13h5v-1e1h-5c-1.62 0-3-1.37-3-3v-4e1c0-1.63 1.38-3 3-3h98c1.62 0 3 1.37 3 3v4e1c0 1.63-1.38 3-3 3h-5v1e1h5c7.16 0 13-5.83 13-13v-4e1c0-7.17-5.84-13-13-13"></path>
+                    <rect x="0" y="0" width="100%" height="100%" stroke="none" opacity="0"></rect>
+                </svg>
+            </span>
+            or use the keyboard shortcut, <strong>Ctrl + P</strong>.
+        </p>
+    </div>
+
+    <div id="printContainer" class="u-show-only-to-print"></div>
+    <!-- begin usabilla live embed code -->
+      <script type="text/javascript" >
+        window.lightningjs||function(c){function g(b,d){d&&(d+=(/\?/.test(d)?"&":"?")+"lv=1");c[b]||function(){var i=window,h=document,j=b,g=h.location.protocol,l="load",k=0;(function(){function b(){a.P(l);a.w=1;c[j]("_load")}c[j]=function(){function m(){m.id=e;return c[j].apply(m,arguments)}var b,e=++k;b=this&&this!=i?this.id||0:0;(a.s=a.s||[]).push([e,b,arguments]);m.then=function(b,c,h){var d=a.fh[e]=a.fh[e]||[],j=a.eh[e]=a.eh[e]||[],f=a.ph[e]=a.ph[e]||[];b&&d.push(b);c&&j.push(c);h&&f.push(h);return m};return m};var a=c[j]._={};a.fh={};a.eh={};a.ph={};a.l=d?d.replace(/^\/\//,(g=="https:"?g:"http:")+"//"):d;a.p={0:+new Date};a.P=function(b){a.p[b]=new Date-a.p[0]};a.w&&b();i.addEventListener?i.addEventListener(l,b,!1):i.attachEvent("on"+l,b);var q=function(){function b(){return["<head></head><",c,' onload="var d=',n,";d.getElementsByTagName('head')[0].",d,"(d.",g,"('script')).",i,"='",a.l,"'\"></",c,">"].join("")}var c="body",e=h[c];if(!e)return setTimeout(q,100);a.P(1);var d="appendChild",g="createElement",i="src",k=h[g]("div"),l=k[d](h[g]("div")),f=h[g]("iframe"),n="document",p;k.style.display="none";e.insertBefore(k,e.firstChild).id=o+"-"+j;f.frameBorder="0";f.id=o+"-frame-"+j;/MSIE[ ]+6/.test(navigator.userAgent)&&(f[i]="javascript:false");f.allowTransparency="true";l[d](f);try{f.contentWindow[n].open()}catch(s){a.domain=h.domain,p="javascript:var d="+n+".open();d.domain='"+h.domain+"';",f[i]=p+"void(0);"}try{var r=f.contentWindow[n];r.write(b());r.close()}catch(t){f[i]=p+'d.write("'+b().replace(/"/g,String.fromCharCode(92)+'"')+'");d.close();'}a.P(2)};a.l&&setTimeout(q,0)})()}();c[b].lv="1";return c[b]}var o="lightningjs",k=window[o]=g(o);k.require=g;k.modules=c}({});
+        window.usabilla_live = lightningjs.require("usabilla_live", "https://w.usabilla.com/7fb2bbcd20b7.js");
+        var customData = {"identification":{"pii":"S0097849306001336","doi":"","issn":"","isbn":"","cid":"","document":""}};
+
+        if(window.pageData && pageData.content && pageData.content[0]) {
+          customData.entitlementType = pageData.content[0].entitlementType;
+        }
+        if(window.pageData && pageData.visitor) {
+          customData.accessType = pageData.visitor.accessType;
+          customData.accountId = pageData.visitor.accountId;
+          customData.loginStatus = pageData.visitor.loginStatus;
+        }
+        usabilla_live("data", {"custom": customData });
+      </script>
+      <!-- end usabilla live embed code -->
+    <!-- begin container for print -->
+    <!-- end container for print -->
+  </body>
+  </html>

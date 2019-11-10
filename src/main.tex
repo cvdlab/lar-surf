@@ -1,4 +1,4 @@
-\documentclass[11pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\documentclass[11pt, oneside]{amsart}   	% use "amsart" instead of "article" for AMSLaTeX format
 \usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
 \geometry{letterpaper}                   		% ... or a4paper or a5paper or ...
 %\geometry{landscape}                		% Activate for rotated page geometry
@@ -15,7 +15,7 @@
 \usepackage{lmodern}
 
 
-
+\nonstopmode
 \input{macros}
 
 % rules for for inputed tables
@@ -48,12 +48,12 @@ In this paper we introduce a novel algebraic \textsc{lar-surf} filter, well foun
 %\section{}
 %\subsection{}
 
-\include{intro}
-\include{background}
-\include{design}
-\include{implementation}
-\include{examples}
-\include{conclusion}
+\input{intro}
+\input{background}
+\input{design}
+\input{implementation}
+\input{examples}
+\input{conclusion}
 
 
 
@@ -126,6 +126,6 @@ In this paper we introduce a novel algebraic \textsc{lar-surf} filter, well foun
 
 \clearpage{}
 \bibliographystyle{alpha}
-\bibliography{library}
+\bibliography{library,TSAS-2019}
 
 \end{document}

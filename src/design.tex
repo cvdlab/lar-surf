@@ -5,30 +5,30 @@
 \subsection{Block decomposition}\label{sec:bbbb}
 
 We assume that medical devices produce 3D images with lateral dimensions that are integer multiples of some powers of two, like 128, 256, 512, etc.
-Any cuboidal portion of image is completely determined by the Cartesian indices of its voxel of lowest and highest indices, and extracted by multidimensional array \emph{slicing} as $Image([\ell_x$:$h_x, \ell_y$:$h_y, \ell_z$:$h_z])$.
+Any cuboidal portion of image is completely determined by the Cartesian indices of its voxels of lowest and highest indices, and extracted by multidimensional array \emph{slicing} as $Image([\ell_x$:$h_x, \ell_y$:$h_y, \ell_z$:$h_z])$.
 
-For the sake of simplicity, we assume a common size on the three image axes, and the corresponding image portion $\mathcal{B}$, called \emph{block}, as a function of its element of the  lowest  block  coordinates $i,j,k\in\N$ and of block dimension $n$:
+For the sake of simplicity, we assume a common size on the three image axes, and the corresponding image portion $\B$, called \emph{block}, as a function of its element of the  lowest  block  coordinates $i,j,k\in [1:n]$ and of block dimension $n\in\N$:
 \[
-\mathcal{B}(i,j,k,n) := Image([in\mbox{:}in+n, jn\mbox{:}jn+n, kn\mbox{:}kn+n]) 
+\B(i,j,k,n) := Image([in:in+n, jn:jn+n, kn:kn+n]) 
 \]
 
 \begin{figure}[htbp] %  figure placement: here, top, bottom, or page
    \centering
    \includegraphics[width=0.5\linewidth]{figs/blocks} 
-   \caption{A possible block partitioning of a radiologic image. The evidenced 2D block, of size $n^d=64^2$, is sliced as $\mathcal{B}([2,1,64]) = Image([128:172],[64:128)]$}
+   \caption{A possible block partitioning of a radiologic image. The evidenced 2D block, of size $n^d=64^2$, is sliced by $\B([2,1,64]) = Image([128:172],[64:128)]$}
    \label{fig:blocks}
 \end{figure}
 
 
-Figure~\ref{fig:blocks} shows the block decomposition in a 2D image, with positive integer $u,v$ lateral sizes of image. Note that block sides do not necessarily correspond to image edges. 
+Figure~\ref{fig:blocks} shows the block decomposition in a 2D image, with positive integers $(u,v)$ giving the lateral sizes of image. Note that block sides do not necessarily correspond to image edges. 
 
 
 \subsection{Block operator }\label{sec:block}
 
 \paragraph{Chain coordinates }\label{sec:bbbb} 
-We are going to treat each image block independently from each other. Hence we map each image subspace $\mathcal{B}(i,j,n)$ to the linear \emph{chain} space $C_2$ of dimension $n\times n$, using coordinate vectors $c_{h,k}\in \\mathcal{B}^{n\times n} := \{0,1\}^{n\times n}$, where the basis element $c = c_{h,k} \in C_2$ is mapped via Cartesian-to-linear map to the binary vector 
+We are going to treat each image block independently from each other. Hence we map each image subspace $\B(i,j,n)$ to the linear \emph{chain} space $C_2$ of dimension $n\times n$, using coordinate vectors $c_{h,k}\in \\B^{n\times n} := \{0,1\}^{n\times n}$, where the basis element $c = c_{h,k} \in C_2$ is mapped via Cartesian-to-linear map to the binary vector 
 \[
-Image(h,k) \mapsto c_{h,k} := [0 \cdots 0\ 1\ 0 \cdots 0] \in \\mathcal{B}^{n\times n}
+Image(h,k) \mapsto c_{h,k} := [0 \cdots 0\ 1\ 0 \cdots 0] \in \B^{n\times n}
 \]
 for each $0\leq h,k \leq n$, and where the (single) unit element is in position $nk + h \leq n\times n$.
 
@@ -72,19 +72,19 @@ First we set the size $n$ of the block, in order to decompose the input $Image(u
 \[
 M = \ceil{u/n} \times \ceil{v/n} \times \ceil{w/n} \simeq \frac{uvw}{n^3}
 \] of blocks. 
-Then we consider each image portion $c_{i,j,k} = S\cap \mathcal{B}(i,j,k,n)$ and compute its (binary) coordinate representation  $[c]_{i,j,k}\in C_3(n,n,n)$. This one is a sparse binary vector of length $n^3$. Then assemble the $M$ representations $c$ of segment portions into a sparse binary matrix $\T{S}$, of dimension $n^d \times M$. Finally compute a matrix $\T{\mathcal{B}}$ of boundary portions of $S$, represented by columns as chain coordinate vectors in $C_2$:
+Then we consider each image portion $c_{i,j,k} = S\cap \B(i,j,k,n)$ and compute its (binary) coordinate representation  $[c]_{i,j,k}\in C_3(n,n,n)$. This one is a sparse binary vector of length $n^3$. Then assemble the $M$ representations $c$ of segment portions into a sparse binary matrix $\T{S}$, of dimension $n^d \times M$. Finally compute a matrix $\T{\B}$ of boundary portions of $S$, represented by columns as chain coordinate vectors in $C_2$:
 \[
-\T{\mathcal{B}} = [\partial_3(n)]\, \T{S}.
+\T{\B} = [\partial_3(n)]\, \T{S}.
 \]
 where the boundary matrix has dimension $d\,n\,(1+n)^{d-1} \times n^d$.
-Of course, the $\T{\mathcal{B}}$ sparse matrix has the same column number $M$ of $\T{S}$, because each column contains the boundary representation of the corresponding $S\cap Box_{i,j,k}{i,j,k}$, and the number of rows of the operator, equal to the dimension of the linear space $C_2$.
+Of course, the $\T{\B}$ sparse matrix has the same column number $M$ of $\T{S}$, because each column contains the boundary representation of the corresponding $S\cap Box_{i,j,k}{i,j,k}$, and the number of rows of the operator, equal to the dimension of the linear space $C_2$.
 
 \paragraph{Embedding}
-A final computational step is needed, in order to embed the 2-chains in Euclidean space $\E^3$ and to assemble the whole resulting surface. In particular, we need to compute the \emph{embedding function} $\mu : C_0 \to \E^3$, where $C_0$ is the space of 0-chains, one-to-one corresponding to the vertices of the extracted surface. The simplest solution is to associate  four 0-cells to each 2-cell of the extracted surface, i.e.~to each non-zero entry in every column of $\T{\mathcal{B}}$.  The $\mu$ function  can be computed by identifying, via  element position in the column, a triple of integer values $0\leq x\leq u$, $0\leq y\leq v$, and $0\leq z\leq w$ for each vertex of the 2-cell.  The mapping can be implemented using a dictionary, that will store the inverse coordinate transformation used at the beginning, i.e.~the one from linear to Cartesian coords, in order of not duplicating the output vertices.   
+A final computational step is needed, in order to embed the 2-chains in Euclidean space $\E^3$ and to assemble the whole resulting surface. In particular, we need to compute the \emph{embedding function} $\mu : C_0 \to \E^3$, where $C_0$ is the space of 0-chains, one-to-one corresponding to the vertices of the extracted surface. The simplest solution is to associate  four 0-cells to each 2-cell of the extracted surface, i.e.~to each non-zero entry in every column of $\T{\B}$.  The $\mu$ function  can be computed by identifying, via  element position in the column, a triple of integer values $0\leq x\leq u$, $0\leq y\leq v$, and $0\leq z\leq w$ for each vertex of the 2-cell.  The mapping can be implemented using a dictionary, that will store the inverse coordinate transformation used at the beginning, i.e.~the one from linear to Cartesian coords, in order of not duplicating the output vertices.   
 
 \paragraph{Surface assembling}
 
-All boundary surface subsets $\mathcal{B}_{i,j,k}(S) = \partial_3 S \cap \mbox{Box}_{i,j,k}$, provided by  columns of $\T{S}$, are embedded in the same coordinate space. In formal terms: 
+All boundary surface subsets $\B_{i,j,k}(S) = \partial_3 S \cap \mbox{Box}_{i,j,k}$, provided by  columns of $\T{S}$, are embedded in the same coordinate space. In formal terms: 
 \[
 \texttt{Lar}(S) := (\texttt{Geom}(S), \texttt{Top}(S)) = (\texttt{V}, \texttt{CV}),
 \]
@@ -100,13 +100,13 @@ and
 \\
 \texttt{Geom} &:= \mu(C_0(B_{i,j,k})) = \texttt{W} \subset \texttt{V},
 \\
-\texttt{Top} &:= C_2(B_{i,j,k}) = \T{\mathcal{B}}_{i,j,k} \mapsto \texttt{FW} \subset \texttt{FV}.
+\texttt{Top} &:= C_2(B_{i,j,k}) = \T{\B}_{i,j,k} \mapsto \texttt{FW} \subset \texttt{FV}.
 \end{align}
 
 
 A translation transformation applied to each vertex subset $\texttt{W}_{i,j,k}$ with translation  vector $\v{t} = [i,j,k]$ will therefore move it in the final space position, so finally giving
 \[
-\texttt{Lar}(\mathcal{B}) = \oplus_{i,j,k}\texttt{Lar}(\partial_3 S_{i,j,k})) = \oplus_{i,j,k}(\texttt{W}, \texttt{FW}) .
+\texttt{Lar}(\B) = \oplus_{i,j,k}\texttt{Lar}(\partial_3 S_{i,j,k})) = \oplus_{i,j,k}(\texttt{W}, \texttt{FW}) .
 \]
 
 
