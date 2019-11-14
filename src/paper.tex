@@ -140,7 +140,7 @@ To display a triangulation of  boundary faces  in their proper position in space
 \]
 The GCC allows to transform the (possibly non connected) boundary 2-cycle of surfaces as a standard B-rep~\cite{shapiroSM:202}. 
 The geometry \texttt{geom} is given by
-the embedding matrix \texttt{W} of vertices (0-cells), and  topology \texttt{top} by the three sparse matrices (\texttt{EV}, \texttt{FE}, \texttt{CF}) of coboundaries ($\delta_1, \delta_2, \delta_3$) of the chain complex describing a   
+the embedding matrix \texttt{W} of vertices (0-cells), and  topology \texttt{top} by the three sparse matrices (\texttt{EV}, \texttt{FE}, \texttt{CF}) of coboundaries ($\delta_0, \delta_1, \delta_2$) of the chain complex describing a   
 space arrangement~\cite{paoluzzi2019finite}.
 Note that ordered pairs of letters from \texttt{V,E,F,C}, correspond to \emph{\emph{\texttt{V}}ertices$\to$\emph{\texttt{E}}dges$\to$\emph{\texttt{F}}aces$\to$\emph{\texttt{C}}ells} into the 
 \emph{\emph{\texttt{C}}olumn$\to$\emph{\texttt{R}}ow} order of matrix maps of operators.
@@ -306,18 +306,18 @@ The computer code is implemented in Julia language~\cite{BEKS14} according to th
 \subsubsection*{Workflow setup}\label{}The functions in this preliminary step include:
 \begin{enumerate}
 
-\item input of 3D medical image $\mathcal{I}$ dimensions $\ell_1, \ell_2, \ell_3$, such that: $\mathcal{I} = [\ell_1]\times[\ell_2]\times[\ell_3]$, where $[\ell_k] = (1,2,\ldots,\ell_k)$;
+\item input of 3D medical image $\mathcal{I}$ with \emph{shape} $(\ell_1, \ell_2, \ell_3)$, such that: $\mathcal{I} = [\ell_1]\times[\ell_2]\times[\ell_3]$, where $[\ell_k] = [1,2,\ldots,\ell_k]$;
 
 \item analysis of resources available in the computational environment, including operating system, type and number of compute nodes (processors, cores, GPUs), number of cores per node, RAM and caches amounts;
 
-\item depending on the above, best decision for $\emph{size}$ of 3D image blocks $\mathcal{B}$ (bricks). With defaults $\emph{size}=64$,  the number of bricks will be $n=\ceil{\ell_1/size}\times\ceil{\ell_2/size}\times\ceil{\ell_3/size}$. 
+\item depending on the above, best decision for \emph{size} of 3D image block (or brick) $\mathcal{B}$. With defaults $\emph{size}=64$,  the \emph{number of bricks} will be $n=\ceil{\ell_1/size}\times\ceil{\ell_2/size}\times\ceil{\ell_3/size}$. 
 Hence the default number of bricks is $n=256$, for standard images $512\times 512\times 256$;
 
-\item computation of a Julia's sparse boundary matrix $[\partial_B]$, returning a value of type \texttt{SparseMatrixCSC\{Int8\}\{Int64\}}, where \texttt{Int8} and \texttt{Int64} are the types for values and indices, respectively, stored by Compressed Sparse Column (CSC) format; the average $[\partial_B]$ (for $\emph{size}$ = 64) is about 45 MB;
+\item computation of the Julia's sparse boundary matrix $[\partial_B]$, returning a value of type \texttt{SparseMatrixCSC\{Int8\}\{Int64\}}, where \texttt{Int8} and \texttt{Int64} are the types for values and indices, respectively, stored by Compressed Sparse Column (CSC) format; the storage of $[\partial_B]$ (for $\emph{size}$ = 64) requires about 45 MB;
 
-\item creation of either a local or distributed channel to implement a producer/consumer model of parallel/distributed computation, depending on available resources;
+\item creation of either a local or distributed \texttt{channel} to implement a producer/consumer model of parallel/distributed computation, depending on available resources;
 
-\item distribution of matrix $[\partial_B]$, of default size $45$ MB, to all available nodes/cores (workers) using the Julia macro \texttt{@eveywhere}. 
+\item distribution of matrix $[\partial_B]$, of default size $45$ MB, to all available nodes/cores (Julia workers) using the Julia macro \texttt{@eveywhere}. 
 
 \end{enumerate}
 
@@ -331,7 +331,8 @@ Hence the default number of bricks is $n=256$, for standard images $512\times 51
 With $size=64$, the number of non-zeros within the sparse matrix $[\partial(64^3)]$ is $\mathtt{nnz} = 4 792 266$, for a memory size of $9\times \mathtt{nnz}+8\times 262144 \simeq 45$ MB. The memory size of the sparse matrix is computed by considering $8+1$ bytes for non-zero element (which are exactly 6 per row), plus 8 bytes per each index of column start.  
 
 
-\subsubsection*{Job enqueuing}\label{}Communication and data synchronization may be managed through \emph{Channels}, which are the FIFO conduits that may provide producer/consumer communication. Overall execution time can be improved if other tasks can be run while a task is being executed, or while waiting for an external service/function to complete. The single work items of this stage follow:
+\subsubsection*{Job enqueuing}\label{}
+Communication and data synchronization may be managed through \emph{Channels}, which are the FIFO conduits that may provide producer/consumer communication. Overall execution time can be improved if other tasks can be run while a task is being executed, or while waiting for an external service/function to complete. The single work items of this stage follow:
 \begin{enumerate}
 
 \item extraction, from image arrays of the block views, depending on 3 Cartesian indices;
@@ -366,11 +367,11 @@ Size of block $64^3$; size of image $512^2\times 256$.
 }, or more in case of either smaller blocks or image greater than the standard one, this stage must be evidently parallelized and carefully tuned, possibly by using the GPU, if available.
 \begin{enumerate}
 
-\item Various multiplication algorithms are being experimented, using several packages for sparse linear algebra and/or custom implementations;
+\item Various multiplication algorithms are being tested, using several packages for sparse linear algebra and/or custom implementations;
 
 \item the total speed of this stage will strongly depend on the hardware available, on the granularity of blocks, and on the choice between dense/sparse storage of encoded 3-chains;
 
-\item anyway, the compute elements or threads will be feed without solution of continuity in a \emph{dataflow} process. This parallel operation is, according to our preliminary experiments, the critical one of the whole workflow, in the sense that any $\Delta T$ (either positive or negative) in this stage will contribute to the total time $T$.
+\item anyway, the compute elements or threads will be fed without solution of continuity in a \emph{dataflow} process. This parallel operation is, according to our preliminary experiments, the critical one of the whole workflow, in the sense that any $\Delta T$ (either positive or negative) in this stage will contribute to the total time $T$.
 
 \end{enumerate}
 
@@ -465,7 +466,7 @@ $s=\input{input/ircad_statistics}$ it can be shown that the mean of time consume
 %\input{conclusion}
 \section{Conclusion}\label{sec:conclusion}
 
-In this paper we have introduced and discussed a Julia implementation of an algebraic filter to extract the boundary sourface of a specific image segment, described as a 3-chain of voxels, from medical 3D images. We have shown a good advantage over standard marchin-cubes algorithms. Translations from cartesian indices of cells to linearized indices, and the sparse matrix-vector multiplication are the main computational kernels of this approach. The current implementation employs Julia's channels for multiprocessing, and can be extended to gain a much greater speed-up using hybrid architectures mixing  CPUs and GPUs of last generation. 
+In this paper we have introduced and discussed a Julia implementation of an algebraic filter to extract from medical 3D images the boundary sourface of a specific image segment, described as a 3-chain of voxels. We have shown a good advantage over standard marchin-cubes algorithms. Translations from cartesian indices of cells to linearized indices, and the sparse matrix-vector multiplication are the main computational kernels of this approach. The current implementation employs Julia's channels for multiprocessing, and can be extended to gain a much greater speed-up using hybrid architectures mixing  CPUs and GPUs of last generation. 
 
 \appendix
 \section{Appendix}
