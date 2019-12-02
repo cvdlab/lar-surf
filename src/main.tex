@@ -1,20 +1,21 @@
-\documentclass[11pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\documentclass[11pt, oneside]{amsart}   	% use "amsart" instead of "article" for AMSLaTeX format
 \usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
-\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ...
 %\geometry{landscape}                		% Activate for rotated page geometry
 %\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
 \usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
-								% TeX will automatically convert eps --> pdf in pdflatex		
+								% TeX will automatically convert eps --> pdf in pdflatex
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{hyperref}
 
 %SetFonts
+\usepackage[utf8x]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 
 
-
+\nonstopmode
 \input{macros}
 
 % rules for for inputed tables
@@ -31,7 +32,8 @@
 %SetFonts
 
 
-\title{Fast algebraic filtering of surfaces from 3D medical images with Julia}
+
+\title{Algebraic filtering of surfaces from medical images with Julia}
 \author{Miroslav Jirik and Alberto Paoluzzi}
 \date{}							% Activate to display a given date or no date
 
@@ -39,7 +41,7 @@
 \maketitle
 
 \begin{abstract}
-In this paper we introduce a novel algebraic \textsc{lar-surf} filter, well founded on algebraic topology methods, to extract and smooth the boundary surface of any subset of voxels arising from the segmentation of a 3D medical image. The input is defined as a \emph{chain}, i.e.~as a vector from a linear space of 3-chains, represented in coordinates as a sparse Boolean vector. The output is produced as the result of the mapping via the linear boundary operator $\partial_3:C_3 \to C_2$ between linear spaces of 3- and 2-chains.  In particular, when the input set of voxels is either not (4-)connected, or contains one or more empty regions inside, \textsc{lar-surf} generates a non connected set of closed surfaces, i.e.~a set of 2-cycles---using the language of algebraic topology. The only data structures used by this approach are sparse arrays with one or two indices, i.e.~sparse vectors and matrices. This work is based on LAR (Linear Algebraic Representation) methods, and is implemented in Julia language, natively supporting parallel computing on hybrid architectures.
+In this paper we introduce a novel algebraic \textsc{lar-surf} filter, well founded on algebraic topology methods, to extract and smooth the boundary surface of any subset of voxels arising from  segmentation of a 3D medical image. The input is defined as a \emph{chain}, i.e.~as a vector from a linear space of 3-chains, represented in coordinates as a sparse binary vector. The output is produced by a linear mapping between spaces of 3- and 2-chains through the boundary operator $\partial_3:C_3 \to C_2$.  In particular, when the input set of voxels is either not (4-)connected, or contains one or more empty regions inside, \textsc{lar-surf} generates a non connected set of closed surfaces, i.e.~a set of 2-cycles---using the language of algebraic topology. The only data structures used by this approach are sparse arrays with one or two indices, i.e.~sparse vectors and matrices. This work is based on LAR (Linear Algebraic Representation) methods, and is implemented in Julia language, natively supporting parallel computing on hybrid architectures.
 \end{abstract}
 
 \tableofcontents
@@ -47,12 +49,12 @@ In this paper we introduce a novel algebraic \textsc{lar-surf} filter, well foun
 %\section{}
 %\subsection{}
 
-\include{intro}
-\include{background}
-\include{design}
-\include{implementation}
-\include{examples}
-\include{conclusion}
+\input{intro}
+\input{background}
+\input{design}
+\input{implementation}
+\input{examples}
+\input{conclusion}
 
 
 
@@ -62,50 +64,53 @@ In this paper we introduce a novel algebraic \textsc{lar-surf} filter, well foun
 
 \begin{description}
 \item[$\mathcal{I}$]  three-dimensional medical image
-\\[-8mm]
+\\[-7mm]
 \item[$\ell_1, \ell_2, \ell_3$]  dimensions of image
-\\[-8mm]
-\item[$\mathcal{S}$]  segment: subset of voxels
-\\[-8mm]
-\item[$\mathcal{B}$] 3D image block 
-\\[-8mm]
-\item[$size$] lateral dimension of cubic block $\mathcal{B}$ 
-\\[-8mm]
+\\[-7mm]
+\item[$\mathcal{S}$]  segment: a subset of voxels from image segmentation
+\\[-7mm]
+\item[$\mathcal{B}$] 3D image block
+\\[-7mm]
+\item[$size$] lateral dimension of cubic block $\mathcal{B}$
+\\[-7mm]
 \item[$n$]	number of blocks $\mathcal{B}$ (jobs) in $\mathcal{I}$
-\\[-8mm]
+\\[-7mm]
 \item[[$\partial_\mathcal{B}$] ]  boundary matrix for block $\mathcal{B}$
-\\[-8mm]
+\\[-7mm]
 \item[$C_p$] linear (vector) space of $p$-chains
-\\[-8mm]
+\\[-7mm]
 \item[$\nu\in C_p$] $p$-chain
-\\[-8mm]
+\\[-7mm]
 \item[[$\nu$]] coordinate representation (binary vector) of  $\nu$
-\\[-8mm]
+\\[-7mm]
 \item[$\E^3$] Euclidean 3-space
 \end{description}
 
 
 \subsection{Definitions}
 \begin{description}
+
+\item[Boundary model] Closed manifold surface of the boundary of a solid model
+\\[-7mm]
 \item[CSC]  Compressed Sparse Column format for sparse matrices
-\\[-8mm]
+\\[-7mm]
 \item[Global coordinates]  Integer linear coordinates of $\mathcal{I}$
-\\[-8mm]
+\\[-7mm]
 \item[Local coordinates] Integer linear coordinates of $\mathcal{B}$
-\\[-8mm]
-\item[Cartesian coordinates] Integer triples $(i,j,k)$ one-to-one with voxels 
-\\[-8mm]
-\item[Voxels] individual elements in 3D image (3-cells)
-\\[-8mm]
-\item[$p$-chain] formal linear combination of $p$-cells with coefficients in $\{0,1\}$
-\\[-8mm]
-\item[Coord. repr.]  binary vector (for $p$-chains) or binary matrix (for chain operators)
-\\[-8mm]
-\item[Quad]	geometric quadrilateral; convex polygon with four vertices 
-\\[-8mm]
-\item[Foreground voxel] individual element of a segment $\mathcal{S}$
-\\[-8mm]
-\item[Segment]	subset of voxels resulting from image segmentation
+\\[-7mm]
+\item[Cartesian coordinates] Integer triples $(i,j,k)$ one-to-one with voxels
+\\[-7mm]
+\item[Voxels] Individual elements in 3D image (3-cells)
+\\[-7mm]
+\item[$p$-chain] Formal linear combination of $p$-cells with coefficients in $\{0,1\}$
+\\[-7mm]
+\item[Coord. repr.]  Binary vector (for $p$-chains) or binary matrix (for chain operators)
+\\[-7mm]
+\item[Quad]	Geometric quadrilateral; convex polygon with four vertices
+\\[-7mm]
+\item[Foreground voxel] Individual element of a segment $\mathcal{S}$
+\\[-7mm]
+\item[Segment]	Subset of voxels resulting from image segmentation
 \end{description}
 
 \subsection{Dataset Ircad}
@@ -122,6 +127,6 @@ In this paper we introduce a novel algebraic \textsc{lar-surf} filter, well foun
 
 \clearpage{}
 \bibliographystyle{alpha}
-\bibliography{library}
+\bibliography{library,TSAS-2019}
 
-\end{document}  
+\end{document}
