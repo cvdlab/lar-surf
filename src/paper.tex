@@ -30,11 +30,35 @@
 %\newcommand{\bottomrule}{\hline}
 %\newcommand{\specialrule}{}
 
-% M. Jirik added - code highlithing
+%%%%%%% M. Jirik added - code highlithing
 % \usepackage{minted}
-\usepackage[cache=false]{minted}
+% \usepackage[cache=false]{minted}
+\usepackage{listings}
 % \usepackage{minted}
 %SetFonts
+\lstdefinelanguage{Julia}%
+  {morekeywords={abstract,break,case,catch,const,continue,do,else,elseif,%
+      end,export,false,for,function,immutable,import,importall,if,in,%
+      macro,module,otherwise,quote,return,switch,true,try,type,typealias,%
+      using,while},%
+   sensitive=true,%
+   alsoother={$},%
+   morecomment=[l]\#,%
+   morecomment=[n]{\#=}{=\#},%
+   morestring=[s]{"}{"},%
+   morestring=[m]{'}{'},%
+}[keywords,comments,strings]%
+
+\lstset{%
+    language         = Julia,
+    basicstyle       = \ttfamily,
+    keywordstyle     = \bfseries\color{blue},
+    stringstyle      = \color{magenta},
+    % commentstyle     = \color{ForestGreen},
+    commentstyle     = \color{green},
+    showstringspaces = false,
+}
+%%%%%%
 
 
 \title{Algebraic filtering of surfaces from medical images with Julia}
@@ -456,33 +480,58 @@ $s=\input{input/ircad_statistics}$ it can be shown that the mean of time consume
 %\input{examples}
 \section{Examples}\label{sec:examples}
 
-\begin{verbatim}
-using Distributed
-addprocs(3)
-using LarSurf
+% \begin{verbatim}
+% \begin{lstlisting}
+% using Distributed
+% addprocs(3)
+% using LarSurf
+% LarSurf.lsp_setup([20, 20, 20]) 
 
-LarSurf.lsp_setup([20, 20, 20]) # set the block size
+% segmentation = LarSurf.generate_truncated_sphere(10)
+% V, FV = LarSurf.lsp_get_surface(segmentation)
+% FVtri = LarSurf.triangulate_quads(FV)
+% Vs = LarSurf.Smoothing.smoothing_FV_taubin(V,FV,0.4,-0.3,50)
 
-segmentation = LarSurf.generate_truncated_sphere(10)
-V, FV = LarSurf.lsp_get_surface(segmentation)
-FVtri = LarSurf.triangulate_quads(FV)
-Vs = LarSurf.Smoothing.smoothing_FV_taubin(V, FV, 0.4, -0.3, 50)
-
-objlines = LarSurf.Lar.lar2obj(Vs, FVtri, "truncated_sphere_tri_taubin.obj")
-\end{verbatim}
-
+% objlines = LarSurf.Lar.lar2obj(Vs, FVtri, "tri_taubin.obj")
+% \end{lstlisting}
+% \end{verbatim}
 We include more examples of extracted surfaces based on Micro-CT data of corrosion casts of pig liver.
 \cite{eberlova2017use}.
+The size of the visualized data is $100\times100\times100$ voxels. The number of of triangles is 
+544784 and number of vertices is 272826.
+
 % The resolution
-Lar-surf 
+% 
+% pth = Pio3d.datasets_join_path("medical/orig/3Dircadb1.1/MASKS_DICOM/liver")
+\begin{lstlisting}[caption=Read from DICOM files]
+using Distributed
+using Pio3d
+addprocs(3)  # set number of processors
+using LarSurf
+
+LarSurf.lsp_setup([64, 64, 64])  # set block size
+
+# read data
+datap = Pio3d.read3d("3Dircadb1.1/MASKS_DICOM/liver")
+segmentation = datap["data3d"]
+voxelsize_mm = datap["voxelsize_mm"]
+
+# get surface
+V, FV = LarSurf.lsp_get_surface(segmentation, voxelsize_mm)
+FVtri = LarSurf.triangulate_quads(FV)
+
+# do smoothing and save data
+Vs = LarSurf.Smoothing.smoothing_FV_taubin(V,FV,0.5,-0.2,40)
+objlines = LarSurf.Lar.lar2obj(Vs, FVtri, "liver.obj")
+\end{lstlisting}
 
 
-\begin{minted}{python}
+% \begin{minted}{python}
 
 
 
-using Pkg
-\end{minted}
+% using Pkg
+% \end{minted}
 % \begin{minted}[breaklines,escapeinside=||,mathescape=true, linenos, numbersep=3pt, gobble=2, frame=lines, fontsize=\small, framesep=2mm]{julia}
 % Your awesome julia code here\end{minted}
 
@@ -496,6 +545,8 @@ using Pkg
 \caption{Triangulated isosurface of portal vein calculated with LAR-SURF}
 \label{fig:example_porta}
 \end{figure}
+
+
 
 \begin{figure}
 \centering
