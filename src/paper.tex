@@ -481,25 +481,36 @@ $s=\input{input/ircad_statistics}$ it can be shown that the mean of time consume
 %\input{examples}
 \section{Examples}\label{sec:examples}
 
+% \includegraphics[height=0.3\textwidth]{figs/nrn10_100_green.png} 
+%\includegraphics[scale=1]{input/ircad_comparison.pdf} 
 \begin{figure}
 \centering
-\includegraphics[width=0.3\textwidth]{figs/liver_01_red_3.png} 
-\vspace{0.05\textwidth}
-\includegraphics[width=0.3\textwidth]{figs/portalvein_01_yellow_3.png} 
-\vspace{0.05\textwidth}
-% \includegraphics[height=0.3\textwidth]{figs/nrn10_100_green.png} 
-\includegraphics[height=0.3\textwidth]{figs/nrn10_100_low_res.png} 
-%\includegraphics[scale=1]{input/ircad_comparison.pdf} 
+\includegraphics[width=0.4\textwidth]{figs/liver_01_red_3.png} 
+% \vspace{0.05\textwidth}
+\includegraphics[width=0.4\textwidth]{figs/portalvein_01_yellow_3.png} 
+% \vspace{0.01\textwidth}
+\includegraphics[height=0.4\textwidth]{figs/nrn10_100_low_res.png} 
+% \vspace{0.05\textwidth}
+\includegraphics[width=0.4\textwidth]{figs/porta_smoothing_2.png} 
 \caption{
 Triangulated isosurface of liver parts extracted with LAR-SURF algorithm. 
-On the left image the surface of the liver parenchyma of human. 
-The middle image shows the Portal Vein from the same Ircad dataset \cite{ircad} 
+On the upper left image the surface of the liver parenchyma of human can be seen. 
+Both right images show the Portal Vein from the same Ircad dataset \cite{ircad} 
 with resolution $1.6\times0.57\times0.57$ [mm].
-On the right image is the pig liver microvasculature based on corrosion cast prepared by Eberlova
+On the left bottom image is the pig liver microvasculature based on corrosion cast prepared by Eberlova
 \cite{eberlova2017use}. The resolution of the Micro-CT data is 4.682 $\mu{}m$.
-}
-\label{fig:example_liver_macro_micro}
+} \label{fig:example_liver_macro_micro}
 \end{figure}
+
+% \begin{figure}
+% \centering
+% \includegraphics[width=0.4\textwidth]{figs/porta_smoothing_1.png} 
+% \vspace{0.05\textwidth}
+% \includegraphics[width=0.4\textwidth]{figs/porta_smoothing_2.png} 
+% %\includegraphics[scale=1]{input/ircad_comparison.pdf} 
+% \caption{Triangulated isosurface of portal vein calculated with LAR-SURF}
+% \label{fig:example_porta}
+% \end{figure}
 
 The implementation of our algorithm is available in LarSurf package. 
 Use of this package can be seen on listings \ref{lst:example1} where the liver segmentation with 2865131 voxels from
@@ -507,9 +518,10 @@ Ircad dataset is used as an input for our surface extraction algorithm. The size
 image is $129 \times 512 \times 512$
 and the voxel resolution is $1.6\times0.57\times0.57$ [mm]. 
 The output surface model created by  182124 triangles and the number of vertices is 90822. The visualization can 
-be seen on left the image of figure \ref{fig:example_liver_macro_micro}. 
+be seen on figure \ref{fig:example_liver_macro_micro}. 
 The portal vein surface extraction can be performed with a small change of input path in code.
-It can be seen in the same image in the middle. The The 3D image resolution is the same. 
+The The 3D image resolution is the same. 
+It can be seen in the same figure. 
 The number of input voxels is 103533. 
 The output surface is created by 90822 vertices and 182124 triangles. 
 
@@ -552,15 +564,6 @@ The number of of triangles is
 % Your awesome julia code here\end{minted}
 
 
-\begin{figure}
-\centering
-\includegraphics[width=0.4\textwidth]{figs/porta_smoothing_1.png} 
-\vspace{0.05\textwidth}
-\includegraphics[width=0.4\textwidth]{figs/porta_smoothing_2.png} 
-%\includegraphics[scale=1]{input/ircad_comparison.pdf} 
-\caption{Triangulated isosurface of portal vein calculated with LAR-SURF}
-\label{fig:example_porta}
-\end{figure}
 
 
 
