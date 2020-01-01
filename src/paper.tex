@@ -34,6 +34,7 @@
 % \usepackage{minted}
 % \usepackage[cache=false]{minted}
 \usepackage{listings}
+\usepackage[dvipsnames]{xcolor}
 % \usepackage{minted}
 %SetFonts
 \lstdefinelanguage{Julia}%
@@ -54,8 +55,8 @@
     basicstyle       = \ttfamily,
     keywordstyle     = \bfseries\color{blue},
     stringstyle      = \color{magenta},
-    % commentstyle     = \color{ForestGreen},
-    commentstyle     = \color{green},
+    commentstyle     = \color{ForestGreen},
+    % commentstyle     = \color{green},
     showstringspaces = false,
 }
 %%%%%%
@@ -480,38 +481,47 @@ $s=\input{input/ircad_statistics}$ it can be shown that the mean of time consume
 %\input{examples}
 \section{Examples}\label{sec:examples}
 
-% \begin{verbatim}
-% \begin{lstlisting}
-% using Distributed
-% addprocs(3)
-% using LarSurf
-% LarSurf.lsp_setup([20, 20, 20]) 
+\begin{figure}
+\centering
+\includegraphics[width=0.3\textwidth]{figs/liver_01_red_3.png} 
+\vspace{0.05\textwidth}
+\includegraphics[width=0.3\textwidth]{figs/portalvein_01_yellow_3.png} 
+\vspace{0.05\textwidth}
+% \includegraphics[height=0.3\textwidth]{figs/nrn10_100_green.png} 
+\includegraphics[height=0.3\textwidth]{figs/nrn10_100_low_res.png} 
+%\includegraphics[scale=1]{input/ircad_comparison.pdf} 
+\caption{
+Triangulated isosurface of liver parts extracted with LAR-SURF algorithm. 
+On the left image the surface of the liver parenchyma of human. 
+The middle image shows the Portal Vein from the same Ircad dataset \cite{ircad} 
+with resolution $1.6\times0.57\times0.57$ [mm].
+On the right image is the pig liver microvasculature based on corrosion cast prepared by Eberlova
+\cite{eberlova2017use}. The resolution of the Micro-CT data is 4.682 $\mu{}m$.
+}
+\label{fig:example_liver_macro_micro}
+\end{figure}
 
-% segmentation = LarSurf.generate_truncated_sphere(10)
-% V, FV = LarSurf.lsp_get_surface(segmentation)
-% FVtri = LarSurf.triangulate_quads(FV)
-% Vs = LarSurf.Smoothing.smoothing_FV_taubin(V,FV,0.4,-0.3,50)
+The implementation of our algorithm is available in LarSurf package. 
+Use of this package can be seen on listings \ref{lst:example1} where the liver segmentation with 2865131 voxels from
+Ircad dataset is used as an input for our surface extraction algorithm. The size of 3D volumetric 
+image is $129 \times 512 \times 512$
+and the voxel resolution is $1.6\times0.57\times0.57$ [mm]. 
+The output surface model created by  182124 triangles and the number of vertices is 90822. The visualization can 
+be seen on left the image of figure \ref{fig:example_liver_macro_micro}. 
+The portal vein surface extraction can be performed with a small change of input path in code.
+It can be seen in the same image in the middle. The The 3D image resolution is the same. 
+The number of input voxels is 103533. 
+The output surface is created by 90822 vertices and 182124 triangles. 
 
-% objlines = LarSurf.Lar.lar2obj(Vs, FVtri, "tri_taubin.obj")
-% \end{lstlisting}
-% \end{verbatim}
-We include more examples of extracted surfaces based on Micro-CT data of corrosion casts of pig liver.
-\cite{eberlova2017use}.
-The size of the visualized data is $100\times100\times100$ voxels. The number of of triangles is 
-544784 and number of vertices is 272826.
-
-% The resolution
-% 
-% pth = Pio3d.datasets_join_path("medical/orig/3Dircadb1.1/MASKS_DICOM/liver")
-\begin{lstlisting}[caption=Read from DICOM files]
+\begin{lstlisting}[caption={Get surface from DICOM volumetric data}, label={lst:example1}]
 using Distributed
-using Pio3d
+using Pio3d  # Read 3D data from DICOM files
 addprocs(3)  # set number of processors
 using LarSurf
 
 LarSurf.lsp_setup([64, 64, 64])  # set block size
 
-# read data
+# read data from DICOM files
 datap = Pio3d.read3d("3Dircadb1.1/MASKS_DICOM/liver")
 segmentation = datap["data3d"]
 voxelsize_mm = datap["voxelsize_mm"]
@@ -525,6 +535,12 @@ Vs = LarSurf.Smoothing.smoothing_FV_taubin(V,FV,0.5,-0.2,40)
 objlines = LarSurf.Lar.lar2obj(Vs, FVtri, "liver.obj")
 \end{lstlisting}
 
+The right image of figure \ref{fig:example_liver_macro_micro} is surface of a microvasculature of pig liver. 
+Volumetric image is based on Micro-CT data of corrosion casts of pig liver.
+\cite{eberlova2017use}.
+The size of the visualized data is $100\times100\times100$ voxels and size of voxel is 4.682 $\mu{}m$.
+The number of of triangles is 
+544784 and number of vertices is 272826.
 
 % \begin{minted}{python}
 
@@ -548,18 +564,6 @@ objlines = LarSurf.Lar.lar2obj(Vs, FVtri, "liver.obj")
 
 
 
-\begin{figure}
-\centering
-\includegraphics[width=0.3\textwidth]{figs/liver_01_red_3.png} 
-\vspace{0.05\textwidth}
-\includegraphics[width=0.3\textwidth]{figs/portalvein_01_yellow_3.png} 
-\vspace{0.05\textwidth}
-% \includegraphics[height=0.3\textwidth]{figs/nrn10_100_green.png} 
-\includegraphics[height=0.3\textwidth]{figs/nrn10_100_low_res.png} 
-%\includegraphics[scale=1]{input/ircad_comparison.pdf} 
-\caption{Triangulated isosurface of portal vein calculated with LAR-SURF}
-\label{fig:example_ircad}
-\end{figure}
 
 
 
