@@ -1,0 +1,55 @@
+
+\section{Appendix}
+\subsection{Symbol list}
+
+\begin{description}
+\item[$\mathcal{I}$]  three-dimensional medical image
+\item[$\ell_1, \ell_2, \ell_3$]  dimensions of image
+\item[$\mathcal{S}$]  segment: a subset of voxels from image segmentation
+\item[$\mathcal{B}$] 3D image brick
+\item[$size$] lateral dimension of cubic brick $\mathcal{B}$
+\item[$n$]	number of bricks $\mathcal{B}$ (jobs) in $\mathcal{I}$
+\item[[$\partial_\mathcal{B}$] ]  boundary matrix for brick $\mathcal{B}$
+\item[$C_p$] linear (vector) space of $p$-chains
+\item[$\nu\in C_p$] $p$-chain
+\item[[$\nu$]] coordinate representation (binary vector) of  $\nu$
+\item[$\E^3$] Euclidean 3-space
+\end{description}
+
+
+\subsection{Definitions}
+\begin{description}
+
+\item[Boundary model] Closed manifold surface of the boundary of a solid model
+\item[CSC]  Compressed Sparse Column format for sparse matrices
+\item[Global coordinates]  Integer linear coordinates of $\mathcal{I}$
+\item[Local coordinates] Integer linear coordinates of $\mathcal{B}$
+\item[Cartesian coordinates] Integer triples $(i,j,k)$ one-to-one with voxels
+\item[Voxels] Individual elements in 3D image (3-cells)
+\item[$p$-chain] Formal linear combination of $p$-cells with coefficients in $\{0,1\}$
+\item[Coord. repr.]  Binary vector (for $p$-chains) or binary matrix (for chain operators)
+\item[Quad]	Geometric quadrilateral; convex polygon with four vertices
+\item[Foreground voxel] Individual element of a segment $\mathcal{S}$
+\item[Segment]	Subset of voxels resulting from image segmentation
+\end{description}
+
+\subsection{3D-Ircadb Dataset}
+
+For perfomance analysis the public dataset from Research Institute against Digestive Cancer (IRCAD) \cite{ircadb} was used. 
+The table 
+% \ref{tab:ircad1} and 
+\ref{tab:ircad2} describe the dataset.
+
+% \begin{table}
+% \input{input/dataset_ircad}
+% \caption{Ircad dataset description, \cite{ircadb}}
+% \label{tab:ircad1}
+% \end{table}
+
+\begin{table}[h!]
+\centering
+\input{input/dataset_ircad_desc}
+\caption{Ircad dataset description \cite{ircadb}. It contains 20 Computed Tomography images of abdomen with 
+manually segmented tissues.}
+\label{tab:ircad2}
+\end{table}
