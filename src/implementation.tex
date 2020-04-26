@@ -139,10 +139,21 @@ The size of boundary matrix is critical parameter of LAR-SURF method. To determi
 
 \begin{figure}
 \centering
-\includegraphics[width=0.6\textwidth]{figs/bm_size_tesla.pdf} 
+\begin{subfigure}{0.495\textwidth}
+\includegraphics[width=0.99\textwidth]{figs/bm_size_tesla.pdf} 
 %\includegraphics[scale=1]{input/ircad_comparison.pdf} 
-\caption{Time requirements of LAR-SURF filter used on artificial with different size of boundary matrix}
+\subcaption{Time requirements of the \textsc{lar-surf} filter used on artificial volumetric data with various size of boundary matrix}
+% \caption{Time requirements of LAR-SURF filter used on artificial with different size of boundary matrix}
 \label{fig:bm_size_tesla}
+\end{subfigure}
+\begin{subfigure}{0.495\textwidth}
+
+\includegraphics[width=0.99\textwidth]{figs/ircad_comparison.pdf} 
+%\includegraphics[scale=1]{input/ircad_comparison.pdf} 
+\subcaption{Time requirements of the LAR-SURF filter and Marching Cubes on Ircad dataset. Error bars shows the 95\% confidence interval}
+\end{subfigure}
+\caption{Performance analysis of the \textsc{lar-surf} filter.}
+
 \end{figure}
 
 
@@ -153,11 +164,11 @@ Based on t-test with $\alpha=0.99$, $p=\input{input/ircad_pvalue}$ and
 $s=\input{input/ircad_statistics}$ it can be shown that the mean of time consumed by LAR-SURF is significantly lower from time consumed by Marching Cubes.
 
 
-\begin{figure}
-\centering
-\includegraphics[width=0.99\textwidth]{figs/ircad_comparison.pdf} 
-%\includegraphics[scale=1]{input/ircad_comparison.pdf} 
-\caption{Time requirements of LAR-SURF filter and Marching Cubes on Ircad dataset. Error bars shows the 95\% confidence interval}
-\label{fig:ircad_comparison}
-\end{figure}
+% \begin{figure}
+% \centering
+% \includegraphics[width=0.99\textwidth]{figs/ircad_comparison.pdf} 
+% %\includegraphics[scale=1]{input/ircad_comparison.pdf} 
+% \caption{Time requirements of LAR-SURF filter and Marching Cubes on Ircad dataset. Error bars shows the 95\% confidence interval}
+% \label{fig:ircad_comparison}
+% \end{figure}
 
