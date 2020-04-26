@@ -1,1 +1,19 @@
+
 \section{Conclusion}\label{sec:conclusion}
+
+% In this paper we have introduced and discussed a Julia implementation of an algebraic filter to extract from medical 3D images the boundary sourface of a specific image segment, described as a 3-chain of voxels. We have shown a good advantage over standard marchin-cubes algorithms. Translations from cartesian indices of cells to linearized indices, and the sparse matrix-vector multiplication are the main computational kernels of this approach. The current implementation employs Julia's channels for multiprocessing, and can be extended to gain a much greater speed-up using hybrid architectures mixing  CPUs and GPUs of last generation. 
+
+% TODO from abstract
+We introduced a Julia implementation of an algebraic filter to extract from 3D medical images the
+boundary surface of some specific image segment, described as a 3-chain of voxels. Translations from
+Cartesian indices of cells to linearized indices, the computation of the sparse boundary matrices, and the
+sparse matrix-vector multiplication are the main computational kernels of this approach. We may show
+a good speed-up over marching-cubes algorithms. The existing implementation employs Julia's channels
+for multiprocessing. Currently, the computational pipeline is being strongly improved to gain a greater
+speed-up using native Julia implementation \texttt{CUDA.jl} of Nvidia programming platform 
+% TODO cite Besard2017 [7]
+, and the Julia's
+\texttt{SuiteSparseGraphBLAS.jl} framework 
+% TODO cite BULUK 2017 [8] 
+for graph algorithms with the language of linear algebra. In
+particular, we are extending its use pattern in order to work with general cellular complexes.
