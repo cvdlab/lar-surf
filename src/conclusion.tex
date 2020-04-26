@@ -3,17 +3,48 @@
 
 % In this paper we have introduced and discussed a Julia implementation of an algebraic filter to extract from medical 3D images the boundary sourface of a specific image segment, described as a 3-chain of voxels. We have shown a good advantage over standard marchin-cubes algorithms. Translations from cartesian indices of cells to linearized indices, and the sparse matrix-vector multiplication are the main computational kernels of this approach. The current implementation employs Julia's channels for multiprocessing, and can be extended to gain a much greater speed-up using hybrid architectures mixing  CPUs and GPUs of last generation. 
 
-% TODO from abstract
+% % TODO from abstract
+% We introduced a Julia implementation of an algebraic filter to extract from 3D medical images the
+% boundary surface of some specific image segment, described as a 3-chain of voxels. Translations from
+% Cartesian indices of cells to linearized indices, the computation of the sparse boundary matrices, and the
+% sparse matrix-vector multiplication are the main computational kernels of this approach. We may show
+% a good speed-up over marching-cubes algorithms. The existing implementation employs Julia's channels
+% for multiprocessing. Currently, the computational pipeline is being strongly improved to gain a greater
+% speed-up using native Julia implementation \texttt{CUDA.jl} of Nvidia programming platform 
+% % TODO cite Besard2017 [7]
+% , and the Julia's
+% \texttt{SuiteSparseGraphBLAS.jl} framework 
+% % TODO cite BULUK 2017 [8] 
+% for graph algorithms with the language of linear algebra. In
+% particular, we are extending its use pattern in order to work with general cellular complexes.
+
+
 We introduced a Julia implementation of an algebraic filter to extract from 3D medical images the
 boundary surface of some specific image segment, described as a 3-chain of voxels. Translations from
 Cartesian indices of cells to linearized indices, the computation of the sparse boundary matrices, and the
-sparse matrix-vector multiplication are the main computational kernels of this approach. We may show
-a good speed-up over marching-cubes algorithms. The existing implementation employs Julia's channels
-for multiprocessing. Currently, the computational pipeline is being strongly improved to gain a greater
+sparse matrix-vector multiplication are the main computational kernels of this approach. 
+
+The implementation of the \textsc{lar-surf} filter is available in the open-source repository and it can be installed using standard Julia package manager \cite{larsurf-github}.
+
+% NEW next two sentences are new
+We showed a good speed-up over marching-cubes algorithms. 
+The existing implementation employs Julia's channels
+for multiprocessing. 
+Our performance experiment showed an optimal size of the brick size.
+Parallelization makes a large portion of spared computational cost. 
+%
+Moreover, we expect additional improvement in the future because our approach is appropriate  for SIMD (Single Instruction, Multiple Data) hybrid architectures of CPUs and GPUs, since only the initial block setup of boundary matrix and image slices, as well the final collection of computed surface portions, require inter-process communication. 
+
+\sloppy{
+Currently, the computational pipeline is being strongly improved to gain a greater
 speed-up using native Julia implementation \texttt{CUDA.jl} of Nvidia programming platform 
 % TODO cite Besard2017 [7]
-, and the Julia's
+% \cite{Besard:2017}
+\cite{Besard2019}
+, and Julia's
 \texttt{SuiteSparseGraphBLAS.jl} framework 
+\cite{Buluc2017}
 % TODO cite BULUK 2017 [8] 
 for graph algorithms with the language of linear algebra. In
 particular, we are extending its use pattern in order to work with general cellular complexes.
+}

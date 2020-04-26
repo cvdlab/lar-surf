@@ -1,0 +1,96 @@
+\vspace{10pt}
+\noindent\underline{
+Boundary matrices for grids of cubes:
+}\vspace{0.2em}\newline 
+% NOTE this is new 
+We give here the full Julia code for the algebraic computation of $\partial_3$ matrix, for a very little grid of unit
+3-cubes. Due to the simplicity of the cells (voxels = cubes), a sufficient (geom,top) pair is given below
+as (\texttt{V,CV}), where \texttt{CV} is an array of arrays of \texttt{Float64} indices of grid cubes.
+
+% julia> V
+% 3x24 Array{Float64,2}:
+% julia> CV
+% 6-element Array{Array{Int64,1},1}:
+\begin{Verbatim}[fontsize=\footnotesize]
+julia> V, CV = Lar.cuboidGrid([3,2,1])
+julia> V
+0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0 1.0 1.0 1.0 1.0 2.0 2.0 2.0 2.0 2.0 2.0 3.0 3.0 3.0 3.0 3.0 3.0
+0.0 0.0 1.0 1.0 2.0 2.0 0.0 0.0 1.0 1.0 2.0 2.0 0.0 0.0 1.0 1.0 2.0 2.0 0.0 0.0 1.0 1.0 2.0 2.0
+0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0
+julia> CV
+[[ 1, 2, 3, 4, 7, 8, 9,10], [ 3, 4, 5, 6, 9,10,11,12], [ 7, 8, 9,10,13,14,15,16],
+ [ 9,10,11,12,15,16,17,18], [13,14,15,16,19,20,21,22], [15,16,17,18,21,22,23,24]
+\end{Verbatim}
+
+\vspace{10pt}
+\noindent\underline{
+Face and Edge Data generation:
+}\vspace{0.2em}\newline 
+%TODO describe CV2FV and CV2EV
+In the following, we provide the functions for generating the face data \texttt{FV} (vertex indices in faces) with function  \texttt{CV2FV} and edge data \texttt{EV} (vertex indices in edges) with function \texttt{CV2EV} from cell data \texttt{CV}. 
+% In particular,  and  functions apply to all the 3-cells in \texttt{CV} the pattern of reference to vertices used by faces and edges of the single 3-cube:
+
+
+
+% \footnotesize
+%\small]
+\begin{Verbatim}[fontsize=\footnotesize]
+function CV2FV( v:: Array { Int64 } )
+return faces = [[v[1], v[2], v[3], v[4]], [v[5], v[6], v[7], v[8]],
+                [v[1], v[2], v[5], v[6]], [v[3], v[4], v[7], v[8]],
+                [v[1], v[3], v[5], v[7]], [v[2], v[4], v[6], v[8]]]
+end
+function CV2EV( v:: Array { Int64 } )
+return edges = [[v[1],v[2]], [v[3],v[4]], [v[5],v[6]], [v[7],v[8]], [v[1],v[3]], [v[2],v[4]],
+                [v[5],v[7]], [v[6],v[8]], [v[1],v[5]], [v[2],v[6]], [v[3],v[7]], [v[4],v[8]]]
+end
+\end{Verbatim}
+
+\vspace{10pt}
+\noindent\underline{
+Characteristic matrices:
+}\vspace{0.2em}\newline 
+The function \texttt{K} transforms an array of arrays ($\mathtt{VV, EV, FV, CV}$) into a sparse binary characteristic matrix
+($\mathtt{M_0, M_1, M_2, M_3}$). A Julia sparse matrix needs three arrays I, J, Vals of rows, columns, values of non-zeros:
+
+% VV = [[v] for v=1:size(V, 2)]
+% [1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15], [16],[17],
+% [18],[19],[20],[21],[22],[23],[24]
+% [1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15], [16],[17],
+% [18],[19],[20],[21],[22],[23],[24]
+\begin{Verbatim}[fontsize=\footnotesize]
+VV = [[v] for v=1:size(V, 2)];
+FV = collect(Set{Array{Int64,1}}(cat(map(CV2FV, CV))))
+[[13,15,19,21], [1,2,3,4], [7,9,13,15], [13,14,15,16], [7,8,13,14], [1,2,7,8], [2,4,8,10], [7,8,9,10], 
+ [3,5,9,11], [8,10,14,16], [15,16,21,22], [9,11,15,17], [3,4,5,6], [17,18,23,24], [11,12,17,18], 
+ [1,3,7,9], [3,4,9,10], [9,10,15,16], [4,6,10,12], [13,14,19,20], [9,10,11,12], [15,16,17,18], 
+ [19,20,21,22], [15,17,21,23], [16,18,22,24], [21,22,23,24], [10,12,16,18], [5,6,11,12], [14,16,20,22]]
+
+EV = collect(Set{Array{Int64,1}}(cat(map(CV2EV, CV))))
+[[15,17], [16,22], [6,12], [17,23], [18,24], [4,10], [3,4], [13,15], [11,12], [9,15], [13,19],
+ [1,7], [5,11], [5,6], [12,18], [8,14], [15,21], [17,18], [1,3], [2,4], [16,18], [2,8], [21,23],
+ [20,22], [1,2], [14,16], [10,16], [13,14], [19,21], [7,13], [9,10], [23,24], [11,17], [21,22],
+ [3,9], [3,5], [9,11], [7,9], [14,20], [7,8], [22,24], [19,20], [8,10], [15,16], [10,12], [4,6]]
+
+function K(CV)
+    I = vcat ( [ [k for h in CV[k]] for k =1: length (CV) ]...)
+    J = vcat (CV ...)
+    Vals = Int8 [1 for k=1: length (I)]
+    return SparseArrays . sparse (I,J,Vals)
+end
+M0 = K(VV); M1 = K(EV); M2 = K(FV); M3 = K(CV)
+\end{Verbatim}
+
+\vspace{10pt}
+\noindent\underline{
+Boundary matrices:
+}\vspace{0.2em}\newline 
+The boundary matrices between non-oriented chain spaces are computed by sparse matrix multiplication
+followed by matrix filtering, produced in Julia by the broadcast of vectorized integer division ($.\div$):
+
+% TODO this is strange the M_1 is M_1 after multiplication?
+$\partial_1 =  \mathtt{M_0} * \mathtt{M'_1} = \mathtt{M'_1}$
+
+$\partial_2 =  \left(\mathtt{M_1} * \mathtt{M'_2}\right) .\div \mathtt{sum(M_1, dims=2)}$
+
+$\partial_3 =  \left(\mathtt{M_2} * \mathtt{M'_3}\right) .\div \mathtt{sum(M_2, dims=2)}$

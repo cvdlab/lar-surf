@@ -5,10 +5,10 @@
 %\includegraphics[scale=1]{input/ircad_comparison.pdf} 
 \begin{figure}
 \centering
-\includegraphics[width=0.45\textwidth]{src/figs/ircad01_segmentation_65.png}
-\includegraphics[width=0.45\textwidth]{src/figs/ircad01_liver_tricolore_01.png}
-\includegraphics[width=0.45\textwidth]{src/figs/ircad01_porta_blue_01.png}
-\includegraphics[width=0.45\textwidth]{src/figs/nrn10_200_pink_02.png}
+\includegraphics[width=0.40\textwidth]{src/figs/ircad01_segmentation_65.png}
+\includegraphics[width=0.40\textwidth]{src/figs/ircad01_liver_tricolore_01.png}
+\includegraphics[width=0.40\textwidth]{src/figs/ircad01_porta_blue_01.png}
+\includegraphics[width=0.40\textwidth]{src/figs/nrn10_200_pink_02.png}
 % \includegraphics[width=0.4\textwidth]{figs/liver_01_red_3.png} 
 % % \vspace{0.05\textwidth}
 % \includegraphics[width=0.4\textwidth]{figs/portalvein_01_yellow_3.png} 
@@ -18,16 +18,16 @@
 % % \vspace{0.05\textwidth}
 % \includegraphics[width=0.4\textwidth]{figs/porta_smoothing_2.png} 
 \caption{
-Liver structures. The upper left image shows one slice  with segmented organs from  the Ircad dataset \cite{ircad}.
-The other images show the triangulated isosurfaces of the macroscopic and microscopic strucures of the liver extracted with \textsc{lar-surf} algorithm. 
-On the upper right image can be seen the wire frame model of the human liver along with portal vein and hepatic artery. 
-% Both right images show the Portal Vein from the same Ircad dataset \cite{ircad} 
+Liver structures. The upper left image shows one slice  with segmented organs from  the Ircad dataset \cite{ircadb}.
+The other images show the triangulated isosurfaces of the macroscopic and microscopic structures of the liver extracted with \textsc{lar-surf} algorithm. 
+The wireframe model of the human liver along with the portal vein and hepatic artery can be seen on the upper right image. 
 The left bottom image shows the detail of the portal vein  
 with resolution $1.6\times0.57\times0.57$ $[mm]$.
 On the bottom right image is shown the microvasculature of a pig liver based on corrosion cast prepared by Eberlova
-\cite{eberlova2017use}. The size of the speciment is 0.936 $[mm]$ along each axis and the resolution of the Micro-CT data is 4.682 $\mu{}m$.
+\cite{eberlova2017use}. The size of the specimen is 0.936 $[mm]$ along each axis and the resolution of the Micro-CT data is 4.682 $\mu{}m$.
 } \label{fig:example_liver_macro_micro}
 \end{figure}
+% Both right images show the Portal Vein from the same Ircad dataset \cite{ircad} 
 
 % \begin{figure}
 % \centering
@@ -39,18 +39,15 @@ On the bottom right image is shown the microvasculature of a pig liver based on 
 % \label{fig:example_porta}
 % \end{figure}
 
-The implementation of our algorithm is available in LarSurf package. 
-Use of this package can be seen on listings \ref{lst:example1} where the liver segmentation with 2865131 voxels from
+% The implementation of our algorithm is available in LarSurf package. 
+Use of the \texttt{LarSurf.jl} package can be seen on listings \ref{lst:example1} where the liver segmentation with 2865131 voxels from the
 Ircad dataset is used as an input for our surface extraction algorithm. The size of 3D volumetric 
 image is $129 \times 512 \times 512$
 and the voxel resolution is $1.6\times0.57\times0.57$ [mm]. 
-The output surface model created by  182124 triangles and the number of vertices is 90822. The visualization can 
-be seen on figure \ref{fig:example_liver_macro_micro}. 
-The portal vein surface extraction can be performed with a small change of input path in code.
-The The 3D image resolution is the same. 
-It can be seen in the same figure. 
-The number of input voxels is 103533. 
-The output surface is created by 90822 vertices and 182124 triangles. 
+The output liver surface model is formed by  182124 triangles and the number of vertices is 90822. 
+The visualization can 
+be seen in Fig. \ref{fig:example_liver_macro_micro}. 
+
 
 \begin{lstlisting}[caption={Get surface from DICOM volumetric data}, label={lst:example1}]
 using Distributed
@@ -74,12 +71,18 @@ Vs = LarSurf.Smoothing.smoothing_FV_taubin(V,FV,0.5,-0.2,40)
 objlines = LarSurf.Lar.lar2obj(Vs, FVtri, "liver.obj")
 \end{lstlisting}
 
-The right image of figure \ref{fig:example_liver_macro_micro} is surface of a microvasculature of pig liver. 
-Volumetric image is based on Micro-CT data of corrosion casts of pig liver.
+The portal vein surface extraction can be performed with a small change of input path in code.
+The 3D image resolution is the same. 
+% It can be seen in the same figure. 
+The number of input voxels is 103533. 
+The output surface is created by 90822 vertices and 182124 triangles. 
+
+The right bottom image of Fig. \ref{fig:example_liver_macro_micro} is the surface of the microvasculature of pig liver. 
+The volumetric image is based on Micro-CT data of corrosion casts of pig liver.
 \cite{eberlova2017use}.
-The size of the visualized data is $100\times100\times100$ voxels and size of voxel is 4.682 $\mu{}m$.
-The number of of triangles is 
-544784 and number of vertices is 272826.
+The size of the visualized data is $100\times100\times100$ voxels and the size of the voxel is 4.682 $\mu{}m$.
+The number of triangles is 
+544784 and the number of vertices is 272826.
 
 % \begin{minted}{python}
 
