@@ -5,22 +5,27 @@
 %\includegraphics[scale=1]{input/ircad_comparison.pdf} 
 \begin{figure}
 \centering
-% \includegraphics[width=0.3\textwidth]{figs/ircad01}
-\includegraphics[width=0.4\textwidth]{figs/liver_01_red_3.png} 
-% \vspace{0.05\textwidth}
-\includegraphics[width=0.4\textwidth]{figs/portalvein_01_yellow_3.png} 
-% \vspace{0.01\textwidth}
-\includegraphics[height=0.4\textwidth]{src/figs/nrn10_100_magenta_high_res.png} 
-% \includegraphics[height=0.4\textwidth]{figs/nrn10_100_low_res.png} 
-% \vspace{0.05\textwidth}
-\includegraphics[width=0.4\textwidth]{figs/porta_smoothing_2.png} 
+\includegraphics[width=0.45\textwidth]{src/figs/ircad01_segmentation_65.png}
+\includegraphics[width=0.45\textwidth]{src/figs/ircad01_liver_tricolore_01.png}
+\includegraphics[width=0.45\textwidth]{src/figs/ircad01_porta_blue_01.png}
+\includegraphics[width=0.45\textwidth]{src/figs/nrn10_200_pink_02.png}
+% \includegraphics[width=0.4\textwidth]{figs/liver_01_red_3.png} 
+% % \vspace{0.05\textwidth}
+% \includegraphics[width=0.4\textwidth]{figs/portalvein_01_yellow_3.png} 
+% % \vspace{0.01\textwidth}
+% \includegraphics[height=0.4\textwidth]{src/figs/nrn10_100_magenta_high_res.png} 
+% % \includegraphics[height=0.4\textwidth]{figs/nrn10_100_low_res.png} 
+% % \vspace{0.05\textwidth}
+% \includegraphics[width=0.4\textwidth]{figs/porta_smoothing_2.png} 
 \caption{
-Triangulated isosurface of liver parts extracted with LAR-SURF algorithm. 
-On the upper left image the surface of the liver parenchyma of human can be seen. 
-Both right images show the Portal Vein from the same Ircad dataset \cite{ircad} 
-with resolution $1.6\times0.57\times0.57$ [mm].
-On the left bottom image is the pig liver microvasculature based on corrosion cast prepared by Eberlova
-\cite{eberlova2017use}. The resolution of the Micro-CT data is 4.682 $\mu{}m$.
+Liver structures. The upper left image shows one slice  with segmented organs from  the Ircad dataset \cite{ircad}.
+The other images show the triangulated isosurfaces of the macroscopic and microscopic strucures of the liver extracted with \textsc{lar-surf} algorithm. 
+On the upper right image can be seen the wire frame model of the human liver along with portal vein and hepatic artery. 
+% Both right images show the Portal Vein from the same Ircad dataset \cite{ircad} 
+The left bottom image shows the detail of the portal vein  
+with resolution $1.6\times0.57\times0.57$ $[mm]$.
+On the bottom right image is shown the microvasculature of a pig liver based on corrosion cast prepared by Eberlova
+\cite{eberlova2017use}. The size of the speciment is 0.936 $[mm]$ along each axis and the resolution of the Micro-CT data is 4.682 $\mu{}m$.
 } \label{fig:example_liver_macro_micro}
 \end{figure}
 
